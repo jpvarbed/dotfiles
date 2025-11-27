@@ -1,0 +1,13 @@
+# Local overrides (don't commit personal settings)
+.claude/settings.local.json
+
+# OS files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Secrets
+.env
+.env.local
+secrets/
