@@ -10,7 +10,13 @@ Installed to: `~/.local/bin/bd`
 
 ## Claude Code Plugins
 
-### From claude-code-plugins marketplace
+### Add marketplace first
+
+```bash
+/plugin marketplace add anthropics/claude-code
+```
+
+### Install plugins
 
 ```bash
 /plugin install ralph-wiggum@claude-code-plugins
