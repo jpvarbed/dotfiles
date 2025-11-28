@@ -1,6 +1,16 @@
-# Installed Plugins
+# Installed Tools & Plugins
 
-## From claude-code-plugins marketplace
+## Beads Issue Tracker
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+```
+
+Installed to: `~/.local/bin/bd`
+
+## Claude Code Plugins
+
+### From claude-code-plugins marketplace
 
 ```bash
 /plugin install ralph-wiggum@claude-code-plugins
