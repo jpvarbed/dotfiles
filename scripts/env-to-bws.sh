@@ -27,7 +27,13 @@ while IFS= read -r line || [ -n "$line" ]; do
   [ "$line" = "${line#*=}" ] && continue        # no '=' → skip
   key="${line%%=*}"; val="${line#*=}"
   key="${key#"${key%%[![:space:]]*}"}"; key="${key%"${key##*[![:space:]]}"}"  # trim
-  case "$val" in \"*\") val="${val#\"}"; val="${val%\"}";; \'*\') val="${val#\'}"; val="${val%\'}";; esac
+  # Single-line values only. An opening quote with no closing quote = multiline
+  # (e.g. a PEM key) — skip rather than silently corrupt it; migrate those by hand.
+  case "$val" in
+    \"*\") val="${val#\"}"; val="${val%\"}";;
+    \'*\') val="${val#\'}"; val="${val%\'}";;
+    \"*|\'*) echo "  ! skipping $key — multiline/unterminated value, migrate manually"; continue;;
+  esac
   case "$key" in
     BWS_ACCESS_TOKEN|BITWARDEN_ACCESS_TOKEN) TOKEN="$val";;
     *) KEYS+=("$key"); VALS+=("$val");;

@@ -31,7 +31,7 @@ if command -v bws >/dev/null; then skip "bws present ($(bws --version 2>/dev/nul
 elif command -v cargo >/dev/null; then say "Installing bws via cargo"; cargo install bws && ok "bws installed"
 else warn "bws missing and no cargo — release: https://github.com/bitwarden/sdk-sm/releases"; fi
 if command -v skills >/dev/null; then skip "skills CLI present ($(skills --version 2>/dev/null))"
-elif command -v npm >/dev/null; then say "Installing skills CLI"; npm i -g skills >/dev/null 2>&1 && ok "skills installed" || warn "skills CLI install failed"
+elif command -v npm >/dev/null; then say "Installing skills CLI"; npm i -g skills >/dev/null && ok "skills installed" || warn "skills CLI install failed (see npm error above)"
 else warn "npm not found — skills.sh installs will fall back to npx"; fi
 
 # 2. Skill collections -------------------------------------------------------

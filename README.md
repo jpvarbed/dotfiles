@@ -59,7 +59,15 @@ scripts/age-init.sh            # one-time: create the age key, write age-recipie
 scripts/soul-edit.sh           # decrypt, edit in $EDITOR, re-encrypt soul.md.age
 scripts/knowledge-edit.sh seal # tar skills/knowledge/ -> knowledge.tar.age (unseal to restore)
 scripts/env-to-bws.sh --slim   # one-time: push .env.local secrets into bws, slim it to just the token
+scripts/rotate-age-key.sh      # rotate the age key: re-encrypt docs, update age-recipient.txt + bws
 ```
+
+**On compromise / rotation:** `rotate-age-key.sh` re-keys going forward, but prior
+`*.age` blobs stay in the public git history and remain readable with the *old*
+key. So rotation protects future commits, not past ones — if the age key leaked,
+treat the historically-committed `soul.md`/`knowledge` contents as exposed. To
+rotate the `BWS_ACCESS_TOKEN`, revoke the machine account in Bitwarden, issue a new
+token, and update `~/dev/.env.local`.
 
 Commit the `.age` files and `age-recipient.txt`. Plaintext (`soul.md`,
 `skills/knowledge/`) and `~/dev/.env.local` stay local.
