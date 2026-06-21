@@ -60,6 +60,22 @@ while IFS= read -r -d '' s; do link_skill "$(dirname "$s")"; m=$((m+1)); done \
   < <(find "$DOTFILES/skills" -name SKILL.md -not -path '*/deprecated/*' -print0)
 ok "$m own skills linked"
 
+# 3b. skills.sh — individual third-party skills (symlinked, registry-managed) --
+if command -v npx >/dev/null; then
+  # entries: "<repo-url>|<skill-name>"  (add more as you adopt them)
+  SKILLS_SH=(
+    "https://github.com/jakubkrehel/make-interfaces-feel-better|make-interfaces-feel-better"
+  )
+  say "Installing skills.sh skills"
+  for entry in "${SKILLS_SH[@]}"; do
+    url="${entry%%|*}"; name="${entry##*|}"
+    if [ -e "$SKILLS_DIR/$name" ]; then skip "$name"
+    else npx --yes skills@latest add "$url" --skill "$name" -g -y >/dev/null 2>&1 || true
+      [ -e "$SKILLS_DIR/$name" ] && ok "$name" || warn "skills.sh failed: $name"
+    fi
+  done
+else warn "npx not found — skip skills.sh skills"; fi
+
 # 4. Plugins (via the claude CLI) --------------------------------------------
 if command -v claude >/dev/null; then
   if claude plugin list 2>/dev/null | grep -q "ponytail@ponytail"; then skip "ponytail installed"

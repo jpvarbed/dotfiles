@@ -33,13 +33,17 @@ marketplace. Re-run it to pull a new machine into sync.
   [`external-skills.list`](./external-skills.list) and links each listed
   `SKILL.md` dir into `~/.claude/skills`. Edit that file to add/remove skills,
   then re-run setup.sh (or `link-skills.sh`-style: `ln -sfn`).
+- **skills.sh** (`npx skills`) — preferred for new individual third-party skills:
+  registry discovery (`skills find`), symlink install, `skills update`. Install
+  globally with `npx skills add <repo> --skill <name> -g`. Recorded in setup.sh's
+  `SKILLS_SH` list so new machines replay them (e.g. `make-interfaces-feel-better`).
 - **Convex** skills: clone the repo, then point your agent's skills dir at its
   `skills/` (or copy the ones you want). Auth needs `CONVEX_PAT` (in Bitwarden SM
   project `pnw-golf-ai`; backup in `~/dev/.env.local`).
 - **My own skills** (this folder): each is `skills/<category>/<name>/SKILL.md`,
   symlinked into `~/.claude/skills` by setup.sh.
   - `engineering/adversarial-review` — Gemini-CLI red-team of a plan/spec/diff.
-  - `engineering/goal` — whole-app audit→test→fix loop; one canonical feature-audit CSV.
+  - `engineering/total-tdd` — whole-app audit→test→fix loop; one canonical feature-audit CSV.
   - `engineering/jason-prototype-stack` — recipe to ship a new `<thing>.jasonv.dev` app fast
     (bun + Vite/React SPA + Convex + Vercel + Squarespace DNS); built from focus-timer.
   - `knowledge/agentic-engineering` — reading-list KB curator (encrypted; see README).
