@@ -133,17 +133,21 @@ else
   warn "no BWS_ACCESS_TOKEN — skipping bws/age/secret steps"
 fi
 
-# 6. soul.md -> ~/.claude/CLAUDE.md ------------------------------------------
-say "Setting up soul.md"
+# 6. soul.md -> every agent's global guidance file ---------------------------
+say "Setting up soul.md (global prefs for all agents)"
 if [ -f "$DOTFILES/soul.md.age" ]; then
   if [ ! -f "$DOTFILES/soul.md" ]; then
     [ -f "$AGE_KEY" ] && { age -d -i "$AGE_KEY" "$DOTFILES/soul.md.age" > "$DOTFILES/soul.md" && ok "decrypted soul.md"; } \
       || warn "no age key — can't decrypt soul.md.age"
   else skip "soul.md present"; fi
   if [ -f "$DOTFILES/soul.md" ]; then
-    if [ -L "$CLAUDE_DIR/CLAUDE.md" ]; then skip "~/.claude/CLAUDE.md symlink exists"
-    else [ -e "$CLAUDE_DIR/CLAUDE.md" ] && { mv "$CLAUDE_DIR/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md.bak.$(date +%s)"; warn "backed up existing CLAUDE.md"; }
-      ln -sfn "$DOTFILES/soul.md" "$CLAUDE_DIR/CLAUDE.md"; ok "linked ~/.claude/CLAUDE.md -> soul.md"; fi
+    # one canonical soul.md, symlinked into each agent's global file (edit once → all see it)
+    for tgt in "$CLAUDE_DIR/CLAUDE.md" "$HOME/.codex/AGENTS.md" "$HOME/.gemini/GEMINI.md"; do
+      mkdir -p "$(dirname "$tgt")"
+      if [ -L "$tgt" ]; then skip "${tgt/#$HOME/~} linked"
+      else [ -e "$tgt" ] && mv "$tgt" "$tgt.bak.$(date +%s)" && warn "backed up ${tgt/#$HOME/~}"
+        ln -sfn "$DOTFILES/soul.md" "$tgt"; ok "linked ${tgt/#$HOME/~} -> soul.md"; fi
+    done
   fi
 else warn "soul.md.age not found — create it with scripts/soul-edit.sh"; fi
 

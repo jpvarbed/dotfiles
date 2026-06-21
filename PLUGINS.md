@@ -1,12 +1,9 @@
 # Installed Tools & Plugins
 
-## Beads Issue Tracker
+## Linear CLI
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
-```
-
-Installed to: `~/.local/bin/bd`
+Issue tracking via Linear. Installed as a skill (`schpet/linear-cli`) by setup.sh;
+the `linear` binary also runs via `npx @schpet/linear-cli`. Personal todos → team `JAS`.
 
 ## Claude Code Plugins
 
@@ -27,7 +24,7 @@ Installed to: `~/.local/bin/bd`
 
 ## What they do
 
-- **ralph-wiggum**: Runs Claude in loop until task completes (use with Beads)
+- **ralph-wiggum**: Runs Claude in loop until task completes
 - **feature-dev**: 7-phase feature development workflow with specialized agents
 - **commit-commands**: Git workflow commands for committing, pushing, creating PRs
 - **agent-sdk-dev**: Development toolkit for Claude Agent SDK

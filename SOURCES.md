@@ -13,5 +13,5 @@
 
 ## Tools
 
-- [Beads Issue Tracker](https://github.com/steveyegge/beads)
+- [Linear CLI (schpet)](https://github.com/schpet/linear-cli)
 - [Claude Code Plugins](https://github.com/anthropics/claude-code/tree/main/plugins)

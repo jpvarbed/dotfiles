@@ -2,15 +2,14 @@
 
 ## Tools Available
 
-### Beads Issue Tracker
+### Linear (issue tracking)
 
-Beads (bd) is installed for persistent task tracking across sessions.
+Track work in Linear via the `linear` CLI (or the `linear-cli` skill). Personal todos go in team `JAS`.
 
 ```bash
-bd ready              # Show ready work
-bd create "title"     # Create issue
-bd list               # List issues
-bd --json             # Use JSON output for agent parsing
+linear issue list --team JAS --sort priority   # ready work
+linear issue create --team JAS --title "..." --description-file FILE
+linear issue view <id>
 ```
 
-Use Beads to track discovered work, manage dependencies, and maintain context between sessions.
+Use Linear to track discovered work and maintain context between sessions.

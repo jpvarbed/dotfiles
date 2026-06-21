@@ -7,7 +7,7 @@
       "WebSearch",
       "Bash(curl:*)",
       "Bash(bash)",
-      "Bash(bd:*)",
+      "Bash(linear:*)",
       "Bash(git:*)"
     ],
     "deny": [
