@@ -71,6 +71,9 @@ if command -v skills >/dev/null || command -v npx >/dev/null; then
     "https://github.com/composiohq/awesome-claude-skills|domain-name-brainstormer"
     "https://github.com/schpet/linear-cli|linear-cli"
   )
+  # NOTE: only Claude Code natively consumes these global skills. skills.sh reports
+  # broad multi-agent support, but Cursor/Gemini/OpenCode have no global-skills dir
+  # it writes to — they only get the CLIs (e.g. `linear`) usable from any terminal.
   say "Installing skills.sh skills"
   for entry in "${SKILLS_SH[@]}"; do
     url="${entry%%|*}"; name="${entry##*|}"
