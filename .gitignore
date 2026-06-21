@@ -13,8 +13,8 @@
 secrets/
 
 # Decrypted secrets — only the .age versions are committed
+# (age-recipient.txt is a PUBLIC key and IS committed; the private key lives in bws)
 soul.md
-bws-token
 
 # Personal knowledge base — committed only as encrypted knowledge.tar.age
 skills/knowledge/

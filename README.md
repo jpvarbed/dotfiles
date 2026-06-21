@@ -7,25 +7,25 @@ config, and secrets bootstrap. Repo lives at `~/dev/dotfiles`.
 
 ```bash
 git clone https://github.com/jpvarbed/dotfiles.git ~/dev/dotfiles
+printf 'BWS_ACCESS_TOKEN=%s\n' "<paste from your vault>" > ~/dev/.env.local   # the one root secret
 ~/dev/dotfiles/scripts/setup.sh
 ```
 
-`setup.sh` is idempotent (safe to re-run) and does a full bootstrap:
+`setup.sh` is idempotent (safe to re-run) and **fully non-interactive** once
+`~/dev/.env.local` exists:
 
-1. Installs prerequisites (`age` via brew; `bws` via cargo if missing).
+1. Installs prerequisites (`age` via brew; `bws` via cargo; warns on missing `jq`).
 2. Clones skill collections into `~/dev/*` (superpowers, mattpocock, convex,
    ponytail, cursor/plugins).
 3. Links skills into `~/.claude/skills`: mattpocock, the curated cursor set
    (`skills/external-skills.list`), and my own dotfiles skills.
-4. Flags the superpowers + ponytail plugin marketplaces to register if missing.
-5. Decrypts `soul.md.age` → symlinks it to `~/.claude/CLAUDE.md` (global prefs).
-   Unseals `knowledge.tar.age` → `skills/knowledge/`.
-6. Decrypts `bws-token.age` → `~/.config/bws/access-token`, exports it in
-   `~/.zshrc`, and verifies `bws` auth.
+4. Installs the ponytail plugin via the `claude` CLI; flags superpowers if missing.
+5. Sources `~/dev/.env.local` for `BWS_ACCESS_TOKEN`, makes `~/.zshrc` source it,
+   verifies `bws`, and pulls the age key (`DOTFILES_AGE_KEY`) from bws.
+6. Decrypts `soul.md.age` → symlinks `~/.claude/CLAUDE.md`; unseals
+   `knowledge.tar.age` → `skills/knowledge/` (both with the age key).
 7. Installs/configures the Gemini CLI for `adversarial-review` (api-key auth;
    pulls `GEMINI_API_KEY` from bws).
-
-The decrypt/unseal steps prompt for your age passphrase.
 
 ## Per-project Claude config
 
@@ -34,30 +34,35 @@ cd ~/dev/your-project
 ln -sf ~/dev/dotfiles/.claude .claude
 ```
 
-## Secrets (age + Bitwarden)
+## Secrets — root of trust
 
-Two secrets are committed **only** in age-encrypted form, unlocked by one local
-passphrase. The decrypted plaintext is gitignored and never committed.
+One plaintext root, `~/dev/.env.local` (outside the repo, never committed), holds
+`BWS_ACCESS_TOKEN` — your single master secret, kept in your Bitwarden vault.
+Everything else flows from it:
+
+- **bws** is the source of truth for all key/value secrets *and* the age key
+  (`DOTFILES_AGE_KEY`). Fetch on demand: `bws secret list`, `bws run -- <cmd>`.
+- **age** protects the doc files that don't fit bws. They're encrypted to a public
+  recipient (`age-recipient.txt`, committed) and decrypted with the private age key
+  (pulled from bws to `~/.config/age/key.txt`) — **non-interactive, no passphrase**.
 
 | Committed (encrypted) | Decrypts to | What |
 |---|---|---|
 | `soul.md.age` | `soul.md` → `~/.claude/CLAUDE.md` | how I like to work |
-| `bws-token.age` | `~/.config/bws/access-token` | Bitwarden SM root token |
 | `knowledge.tar.age` | `skills/knowledge/` | personal reading-list KB (work email + notes) |
-
-The `BWS_ACCESS_TOKEN` unlocks everything else in Bitwarden Secrets Manager;
-fetch other secrets on demand (`bws secret list`, `bws run -- <cmd>`).
+| `age-recipient.txt` | *(public key, committed as-is)* | recipient used to encrypt the above |
 
 ### Editing the secrets
 
 ```bash
+scripts/age-init.sh            # one-time: create the age key, write age-recipient.txt, store key in bws
 scripts/soul-edit.sh           # decrypt, edit in $EDITOR, re-encrypt soul.md.age
-scripts/bws-token-set.sh       # capture a new BWS token and encrypt it
 scripts/knowledge-edit.sh seal # tar skills/knowledge/ -> knowledge.tar.age (unseal to restore)
+scripts/env-to-bws.sh --slim   # one-time: push .env.local secrets into bws, slim it to just the token
 ```
 
-Commit the resulting `.age` files. Plaintext (`soul.md`, `bws-token`,
-`skills/knowledge/`) stays local and gitignored.
+Commit the `.age` files and `age-recipient.txt`. Plaintext (`soul.md`,
+`skills/knowledge/`) and `~/dev/.env.local` stay local.
 
 ## Skills
 

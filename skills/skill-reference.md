@@ -43,8 +43,8 @@ marketplace. Re-run it to pull a new machine into sync.
     (bun + Vite/React SPA + Convex + Vercel + Squarespace DNS); built from focus-timer.
   - `knowledge/agentic-engineering` — reading-list KB curator (encrypted; see README).
 
-Secrets (`soul.md.age`, `bws-token.age`, `knowledge.tar.age`) are also handled by `setup.sh`; see the
-top-level [`README.md`](../README.md).
+Secrets (`~/dev/.env.local` → bws → age key → `soul.md.age` / `knowledge.tar.age`)
+are handled by `setup.sh`; see the top-level [`README.md`](../README.md).
 
 ## Convention
 
