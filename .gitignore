@@ -11,3 +11,13 @@
 .env
 .env.local
 secrets/
+
+# Decrypted secrets — only the .age versions are committed
+soul.md
+bws-token
+
+# Personal knowledge base — committed only as encrypted knowledge.tar.age
+skills/knowledge/
+
+# Beads (local tracker state, not managed by dotfiles)
+.beads/

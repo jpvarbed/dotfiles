@@ -7,8 +7,8 @@
       "WebSearch",
       "Bash(curl:*)",
       "Bash(bash)",
-      "Bash(bd *)",
-      "Bash(git *)"
+      "Bash(bd:*)",
+      "Bash(git:*)"
     ],
     "deny": [
       "Read(.env)",
@@ -16,5 +16,14 @@
       "Read(secrets/**)"
     ],
     "ask": []
-  }
+  },
+  "enabledPlugins": {
+    "ralph-wiggum@claude-code-plugins": true,
+    "feature-dev@claude-code-plugins": true,
+    "hookify@claude-code-plugins": true,
+    "commit-commands@claude-code-plugins": true,
+    "code-review@claude-code-plugins": true,
+    "ponytail@ponytail": true
+  },
+  "alwaysThinkingEnabled": true
 }
