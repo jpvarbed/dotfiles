@@ -100,6 +100,6 @@ login. The GitHub fine-grained `GITHUB_PAT_LLC_TOKEN` exists but can't create re
 
 ## Planned additions
 
-- **Artifact sharing (next):** a fast way to publish the nice artifacts built with Claude
-  (diagrams, SVGs, mockups, one-pagers) to a shareable `jasonv.dev` link. Not built yet — first
-  app to build on this stack. Design TBD.
+- **Artifact sharing (next):** publish the nice artifacts built with Claude (SVGs, HTML
+  widgets, markdown one-pagers) to a shareable link, `art.jasonv.dev/<id>`. First app to build
+  on this stack. Spec: `~/dev/artifact-share/BRIEF.md` + Linear FOC-2.
