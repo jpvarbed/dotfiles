@@ -39,6 +39,7 @@ marketplace. Re-run it to pull a new machine into sync.
 - **My own skills** (this folder): each is `skills/<category>/<name>/SKILL.md`,
   symlinked into `~/.claude/skills` by setup.sh.
   - `engineering/adversarial-review` — Gemini-CLI red-team of a plan/spec/diff.
+  - `engineering/goal` — whole-app audit→test→fix loop; one canonical feature-audit CSV.
   - `engineering/jason-prototype-stack` — recipe to ship a new `<thing>.jasonv.dev` app fast
     (bun + Vite/React SPA + Convex + Vercel + Squarespace DNS); built from focus-timer.
   - `knowledge/agentic-engineering` — reading-list KB curator (encrypted; see README).
