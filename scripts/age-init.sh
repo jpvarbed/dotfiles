@@ -12,6 +12,16 @@ RECIP="$DOTFILES/age-recipient.txt"
 
 command -v age-keygen >/dev/null || { echo "age not installed (brew install age)"; exit 1; }
 
+# Lockout guard: a committed recipient + no local key means this is a NEW machine
+# that should PULL the existing key, not mint a fresh one (which couldn't decrypt
+# the already-committed *.age files).
+if [ ! -f "$KEY" ] && [ -f "$RECIP" ]; then
+  echo "Refusing: $RECIP exists but there's no local key at $KEY." >&2
+  echo "Generating a new key here would orphan the committed *.age files." >&2
+  echo "Run scripts/setup.sh (pulls DOTFILES_AGE_KEY from bws), or copy key.txt from another machine." >&2
+  exit 1
+fi
+
 if [ -f "$KEY" ]; then
   echo "age identity already exists at $KEY"
 else

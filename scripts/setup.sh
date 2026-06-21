@@ -141,13 +141,20 @@ if [ -f "$DOTFILES/soul.md.age" ]; then
       || warn "no age key — can't decrypt soul.md.age"
   else skip "soul.md present"; fi
   if [ -f "$DOTFILES/soul.md" ]; then
-    # one canonical soul.md, symlinked into each agent's global file (edit once → all see it)
-    for tgt in "$CLAUDE_DIR/CLAUDE.md" "$HOME/.codex/AGENTS.md" "$HOME/.gemini/GEMINI.md"; do
+    # Claude + Gemini auto-write memories to their global file, so give them an
+    # @import of soul.md (a real file) — those writes stay local instead of
+    # polluting/clobbering soul.md. Codex has no @import and doesn't auto-write → symlink.
+    for tgt in "$CLAUDE_DIR/CLAUDE.md" "$HOME/.gemini/GEMINI.md"; do
       mkdir -p "$(dirname "$tgt")"
-      if [ -L "$tgt" ]; then skip "${tgt/#$HOME/~} linked"
-      else [ -e "$tgt" ] && mv "$tgt" "$tgt.bak.$(date +%s)" && warn "backed up ${tgt/#$HOME/~}"
-        ln -sfn "$DOTFILES/soul.md" "$tgt"; ok "linked ${tgt/#$HOME/~} -> soul.md"; fi
+      if [ -f "$tgt" ] && [ ! -L "$tgt" ] && grep -qxF "@$DOTFILES/soul.md" "$tgt"; then skip "${tgt/#$HOME/~} imports soul.md"
+      else
+        if [ -e "$tgt" ] || [ -L "$tgt" ]; then mv "$tgt" "$tgt.bak.$(date +%s)" 2>/dev/null || rm -f "$tgt"; fi
+        printf '@%s\n' "$DOTFILES/soul.md" > "$tgt"; ok "${tgt/#$HOME/~} imports soul.md"
+      fi
     done
+    ctgt="$HOME/.codex/AGENTS.md"; mkdir -p "$(dirname "$ctgt")"
+    if [ -L "$ctgt" ]; then skip "${ctgt/#$HOME/~} linked"
+    else [ -e "$ctgt" ] && mv "$ctgt" "$ctgt.bak.$(date +%s)"; ln -sfn "$DOTFILES/soul.md" "$ctgt"; ok "linked ${ctgt/#$HOME/~} -> soul.md"; fi
   fi
 else warn "soul.md.age not found — create it with scripts/soul-edit.sh"; fi
 
