@@ -3,8 +3,13 @@
 # cursor/plugins uses Cursor's .cursor-plugin manifest, so it can't be added as a
 # Claude Code marketplace — we cherry-pick individual SKILL.md dirs instead.
 # Lines starting with # and blank lines are ignored. Edit + re-run setup.sh.
+#
+# Curated down from the full set (skill-audit, Barry-Zhang "don't over-engineer"):
+# dropped the 10 pstack principle-* (folded into soul.md), interrogate (dup of
+# adversarial-review), and speculative meta (arena, orchestrate, recall, reflect,
+# show-me-your-work, figure-it-out) + the learning cluster.
 
-# --- thermos: strict code-quality / maintainability review ---
+# --- thermos: strict code-quality / security review ---
 thermos/skills/thermo-nuclear-code-quality-review
 thermos/skills/thermo-nuclear-review
 thermos/skills/thermos
@@ -20,35 +25,11 @@ cursor-team-kit/skills/loop-on-ci
 cursor-team-kit/skills/what-did-i-get-done
 cursor-team-kit/skills/weekly-review
 
-# --- agentic misc ---
-orchestrate/skills/orchestrate
-continual-learning/skills/continual-learning
+# --- pstack: agentic-engineering tools (kept) ---
 cli-for-agent/skills/cli-for-agents
-teaching/skills/create-learning-path
-teaching/skills/run-learning-retrospective
-
-# --- pstack: agentic-engineering tools ---
 pstack/skills/architect
 pstack/skills/blast-radius
-pstack/skills/figure-it-out
-pstack/skills/interrogate
-pstack/skills/recall
-pstack/skills/reflect
-pstack/skills/show-me-your-work
-pstack/skills/unslop
 pstack/skills/why
 pstack/skills/how
-pstack/skills/arena
+pstack/skills/unslop
 pstack/skills/typescript-best-practices
-
-# --- pstack: principles (high-value subset; ~14 more exist, add as wanted) ---
-pstack/skills/principle-guard-the-context-window
-pstack/skills/principle-prove-it-works
-pstack/skills/principle-fix-root-causes
-pstack/skills/principle-subtract-before-you-add
-pstack/skills/principle-redesign-from-first-principles
-pstack/skills/principle-encode-lessons-in-structure
-pstack/skills/principle-minimize-reader-load
-pstack/skills/principle-build-the-lever
-pstack/skills/principle-never-block-on-the-human
-pstack/skills/principle-outcome-oriented-execution

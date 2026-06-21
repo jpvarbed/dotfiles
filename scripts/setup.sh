@@ -50,6 +50,8 @@ SKILLS_DIR="$CLAUDE_DIR/skills"; mkdir -p "$SKILLS_DIR"
 link_skill() { ln -sfn "$1" "$SKILLS_DIR/$(basename "$1")"; }
 if [ -f "$DEV/mattpocockskills/scripts/link-skills.sh" ]; then
   say "Linking mattpocock skills"; bash "$DEV/mattpocockskills/scripts/link-skills.sh" >/dev/null && ok "mattpocock linked"
+  # culled in the skill-audit — link-skills re-adds everything, so drop these
+  for x in teach scaffold-exercises setup-matt-pocock-skills migrate-to-shoehorn; do rm -f "$SKILLS_DIR/$x"; done
 else warn "mattpocockskills/scripts/link-skills.sh missing"; fi
 LIST="$DOTFILES/skills/external-skills.list"
 if [ -f "$LIST" ]; then

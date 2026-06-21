@@ -2,6 +2,7 @@
 
 Skill collections I pull from, with their git sources and local clones. Add a row
 when I start using a new one. (My own skills live alongside this in `skills/`.)
+For *when to use which skill*, see [`CHEATSHEET.md`](./CHEATSHEET.md).
 
 | Collection | Git | Local clone | What / why |
 |---|---|---|---|
