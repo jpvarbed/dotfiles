@@ -69,6 +69,7 @@ if command -v skills >/dev/null || command -v npx >/dev/null; then
   SKILLS_SH=(
     "https://github.com/jakubkrehel/make-interfaces-feel-better|make-interfaces-feel-better"
     "https://github.com/composiohq/awesome-claude-skills|domain-name-brainstormer"
+    "https://github.com/schpet/linear-cli|linear-cli"
   )
   say "Installing skills.sh skills"
   for entry in "${SKILLS_SH[@]}"; do
