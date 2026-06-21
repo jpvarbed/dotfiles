@@ -33,10 +33,14 @@ marketplace. Re-run it to pull a new machine into sync.
   [`external-skills.list`](./external-skills.list) and links each listed
   `SKILL.md` dir into `~/.claude/skills`. Edit that file to add/remove skills,
   then re-run setup.sh (or `link-skills.sh`-style: `ln -sfn`).
-- **skills.sh** (`npx skills`) — preferred for new individual third-party skills:
-  registry discovery (`skills find`), symlink install, `skills update`. Install
-  globally with `npx skills add <repo> --skill <name> -g`. Recorded in setup.sh's
-  `SKILLS_SH` list so new machines replay them (e.g. `make-interfaces-feel-better`).
+- **skills.sh** (`skills` CLI, installed globally via `npm i -g skills`) — preferred
+  for new individual third-party skills. setup.sh installs the CLI and replays the
+  `SKILLS_SH` list. Commands:
+  - `skills find <query>` — search the registry
+  - `skills add <repo> --skill <name> -g` — install one skill globally (symlinked)
+  - `skills list` · `skills update` · `skills remove <name>`
+  - `skills init <name>` — scaffold a new skill's SKILL.md (authoring)
+  - After `skills add`, add the `<repo>|<name>` line to `SKILLS_SH` in setup.sh.
 - **Convex** skills: clone the repo, then point your agent's skills dir at its
   `skills/` (or copy the ones you want). Auth needs `CONVEX_PAT` (in Bitwarden SM
   project `pnw-golf-ai`; backup in `~/dev/.env.local`).

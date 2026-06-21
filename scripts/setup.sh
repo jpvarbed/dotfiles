@@ -30,6 +30,9 @@ fi
 if command -v bws >/dev/null; then skip "bws present ($(bws --version 2>/dev/null))"
 elif command -v cargo >/dev/null; then say "Installing bws via cargo"; cargo install bws && ok "bws installed"
 else warn "bws missing and no cargo — release: https://github.com/bitwarden/sdk-sm/releases"; fi
+if command -v skills >/dev/null; then skip "skills CLI present ($(skills --version 2>/dev/null))"
+elif command -v npm >/dev/null; then say "Installing skills CLI"; npm i -g skills >/dev/null 2>&1 && ok "skills installed" || warn "skills CLI install failed"
+else warn "npm not found — skills.sh installs will fall back to npx"; fi
 
 # 2. Skill collections -------------------------------------------------------
 say "Cloning skill collections (if missing)"
@@ -61,7 +64,7 @@ while IFS= read -r -d '' s; do link_skill "$(dirname "$s")"; m=$((m+1)); done \
 ok "$m own skills linked"
 
 # 3b. skills.sh — individual third-party skills (symlinked, registry-managed) --
-if command -v npx >/dev/null; then
+if command -v skills >/dev/null || command -v npx >/dev/null; then
   # entries: "<repo-url>|<skill-name>"  (add more as you adopt them)
   SKILLS_SH=(
     "https://github.com/jakubkrehel/make-interfaces-feel-better|make-interfaces-feel-better"
@@ -70,12 +73,12 @@ if command -v npx >/dev/null; then
   say "Installing skills.sh skills"
   for entry in "${SKILLS_SH[@]}"; do
     url="${entry%%|*}"; name="${entry##*|}"
-    if [ -e "$SKILLS_DIR/$name" ]; then skip "$name"
-    else npx --yes skills@latest add "$url" --skill "$name" -g -y >/dev/null 2>&1 || true
-      [ -e "$SKILLS_DIR/$name" ] && ok "$name" || warn "skills.sh failed: $name"
-    fi
+    if [ -e "$SKILLS_DIR/$name" ]; then skip "$name"; continue; fi
+    if command -v skills >/dev/null; then skills add "$url" --skill "$name" -g -y >/dev/null 2>&1 || true
+    else npx --yes skills@latest add "$url" --skill "$name" -g -y >/dev/null 2>&1 || true; fi
+    [ -e "$SKILLS_DIR/$name" ] && ok "$name" || warn "skills.sh failed: $name"
   done
-else warn "npx not found — skip skills.sh skills"; fi
+else warn "no skills CLI or npx — skip skills.sh skills"; fi
 
 # 4. Plugins (via the claude CLI) --------------------------------------------
 if command -v claude >/dev/null; then
