@@ -107,13 +107,14 @@ else warn "no $ENVLOCAL — create it with BWS_ACCESS_TOKEN=… (paste from your
 
 if [ -n "${BWS_ACCESS_TOKEN:-}" ]; then
   ZRC="$HOME/.zshrc"
-  if [ -f "$ZRC" ] && grep -qF 'dotfiles: load BWS token' "$ZRC"; then skip "zshrc exports BWS token"
+  if [ -f "$ZRC" ] && grep -qF 'dotfiles: load BWS token' "$ZRC"; then skip "zshrc has bws-load"
   else
-    {
-      printf '\n# dotfiles: load BWS token (root of all secrets)\n'
-      printf 'export BWS_ACCESS_TOKEN="$(sed -nE '"'"'s/^(export )?(BWS_ACCESS_TOKEN|BITWARDEN_ACCESS_TOKEN)="?([^"]*)"?$/\\3/p'"'"' "$HOME/dev/.env.local" 2>/dev/null | head -1)"\n'
-    } >> "$ZRC"
-    ok "zshrc now exports BWS_ACCESS_TOKEN from .env.local"
+    cat >> "$ZRC" <<'ZRCBLOCK'
+
+# dotfiles: load BWS token on demand — run `bws-load` when you need bws
+bws-load() { export BWS_ACCESS_TOKEN="$(sed -nE 's/^(export )?(BWS_ACCESS_TOKEN|BITWARDEN_ACCESS_TOKEN)="?([^"]*)"?$/\3/p' "$HOME/dev/.env.local" 2>/dev/null | head -1)"; echo "BWS token loaded into this shell."; }
+ZRCBLOCK
+    ok "zshrc now defines bws-load (on-demand, not auto-exported)"
   fi
   if bws secret list >/dev/null 2>&1; then ok "bws auth verified"; else warn "bws auth failed — token invalid/expired"; fi
   # pull the age identity key from bws (decrypts the doc files)
