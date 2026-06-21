@@ -28,3 +28,16 @@ the `linear` binary also runs via `npx @schpet/linear-cli`. Personal todos → t
 - **feature-dev**: 7-phase feature development workflow with specialized agents
 - **commit-commands**: Git workflow commands for committing, pushing, creating PRs
 - **agent-sdk-dev**: Development toolkit for Claude Agent SDK
+
+## Artifact Studio — share-artifact
+
+Agent-native app host (repo `~/dev/artifact-share`, github `jpvarbed/artifact-share`). Any agent in
+any project can publish an app → public URL `https://artifacts.jasonv.dev/<slug>/`.
+
+- **Skill:** `skills/engineering/share-artifact/` (auto-linked into `~/.claude/skills` by setup.sh).
+  Fetches `ARTIFACT_API_KEY` + `ARTIFACT_API_BASE` from bws on demand; drives the CLI at
+  `~/dev/artifact-share/apps/cli/src/index.ts` (`share` | `deploy` | `backend` | `list/get/delete`).
+- **MCP server:** `~/dev/artifact-share/apps/mcp` (tools `publish_artifact`, `deploy_app`,
+  `provision_backend`, `list/get/delete_artifact`); env `ARTIFACT_API_BASE` + `ARTIFACT_API_KEY`.
+- **Key:** durable agent key in bws as `ARTIFACT_API_KEY` (owner `jpvarbed`); base in `ARTIFACT_API_BASE`.
+  All agent-published apps are owned by `jpvarbed` — manage via `artifact list` or studio.artifacts.jasonv.dev.
