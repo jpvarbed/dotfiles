@@ -14,8 +14,8 @@ Publishes to **Artifact Studio** (jpvarbed's agent-native app host). Output: a p
 
 ```bash
 set -a; source ~/dev/.env.local; set +a   # BWS_ACCESS_TOKEN
-export ARTIFACT_API_BASE=$(bws secret list -o json | python3 -c "import sys,json;print(next(s['value'] for s in json.load(sys.stdin) if s['key']=='ARTIFACT_API_BASE'))")
 export ARTIFACT_API_KEY=$(bws secret list -o json | python3 -c "import sys,json;print(next(s['value'] for s in json.load(sys.stdin) if s['key']=='ARTIFACT_API_KEY'))")
+# ARTIFACT_API_BASE defaults to the hosted studio; only export it (also in bws) to self-host.
 ```
 
 If `bws` or the token is missing, tell the user to run `~/dev/dotfiles/scripts/setup.sh` (pulls the
