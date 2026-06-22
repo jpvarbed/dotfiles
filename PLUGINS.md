@@ -49,8 +49,12 @@ Server-owned Pomodoro **and** a cross-project agent fleet at `https://focus.jaso
 (public, github `jpvarbed/focus-timer-tools`). The fleet lets any agent report its status, ask Jason
 a question, and log decisions; Jason sees who's working / who needs him / what was decided on the board.
 
-- **Skill:** `focus-timer` (in `focus-timer-tools/skills/focus-timer/`; install with
-  `npx skills add jpvarbed/focus-timer-tools`). Covers the timer + fleet.
+- **Skill:** `focus-timer` — canonical driver at `skills/engineering/focus-timer/` (auto-linked into
+  `~/.claude/skills` by setup.sh); a copy ships in `focus-timer-tools/skills/focus-timer/` for skills.sh
+  (`npx skills add jpvarbed/focus-timer-tools`). Covers timer + fleet (report/ask/event/fleet).
+- **Scripts:** `focus-timer-tools/scripts/cc-fleet-hook.py` (FOC-12) — `~/.claude/settings.json` hook
+  so local Claude Code sessions auto-report presence (SessionStart→working, Notification→needs_you,
+  Stop→done). See `scripts/README.md`.
 - **CLI:** `focus` (`focus-timer-tools/cli`) — timer (`status`/`start`/`pause`/`resume`/`skip`/`reset`/
   `stats`/`watch`) + fleet (`fleet`, `report agent= project= [state=] [task=]`, `ask agent= [severity=] "q"`).
   Env: `FOCUS_USER_ID` (your account id) + optional `CONVEX_URL` (defaults to prod).
