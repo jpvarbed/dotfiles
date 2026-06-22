@@ -41,3 +41,23 @@ any project can publish an app → public URL `https://artifacts.jasonv.dev/<slu
   `provision_backend`, `list/get/delete_artifact`); env `ARTIFACT_API_BASE` + `ARTIFACT_API_KEY`.
 - **Key:** durable agent key in bws as `ARTIFACT_API_KEY` (owner `jpvarbed`); base in `ARTIFACT_API_BASE`.
   All agent-published apps are owned by `jpvarbed` — manage via `artifact list` or studio.artifacts.jasonv.dev.
+
+## Focus — timer + attention orchestrator
+
+Server-owned Pomodoro **and** a cross-project agent fleet at `https://focus.jasonv.dev`. App repo
+`~/dev/focus-timer` (private; Convex backend + Vite SPA). Tools repo `~/dev/focus-timer-tools`
+(public, github `jpvarbed/focus-timer-tools`). The fleet lets any agent report its status, ask Jason
+a question, and log decisions; Jason sees who's working / who needs him / what was decided on the board.
+
+- **Skill:** `focus-timer` (in `focus-timer-tools/skills/focus-timer/`; install with
+  `npx skills add jpvarbed/focus-timer-tools`). Covers the timer + fleet.
+- **CLI:** `focus` (`focus-timer-tools/cli`) — timer (`status`/`start`/`pause`/`resume`/`skip`/`reset`/
+  `stats`/`watch`) + fleet (`fleet`, `report agent= project= [state=] [task=]`, `ask agent= [severity=] "q"`).
+  Env: `FOCUS_USER_ID` (your account id) + optional `CONVEX_URL` (defaults to prod).
+- **MCP:** hosted `https://mcp.jasonv.dev/api/mcp` (pass your id in the `x-focus-user` header), or local
+  stdio (`mcp/src/stdio.ts`). 11 tools: timer (`focus_status/start/pause/resume/skip/reset/stats`) +
+  **fleet** (`focus_report`, `focus_ask`, `focus_event`, `focus_fleet`). Registered with ARD at
+  `focus.jasonv.dev/.well-known/ai-catalog.json`.
+- **Identity:** `FOCUS_USER_ID` = the web app's `focus_user_id` cookie (the access capability — no bws
+  key). Use the same id to drive the same fleet/timer the web shows. Convex prod
+  `perceptive-butterfly-406`, dev `vivid-ant-124`.
