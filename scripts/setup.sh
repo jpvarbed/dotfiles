@@ -113,6 +113,11 @@ if command -v npm >/dev/null; then
     command -v "$c" >/dev/null && skip "$c present" || { npm i -g "$c" >/dev/null 2>&1 && ok "$c installed" || warn "$c install failed"; }
   done
 fi
+# pixelshot (PixelRAG) — the pixelbrowse skill drives it; CLI via pipx (PEP 668 safe)
+if command -v pixelshot >/dev/null; then skip "pixelshot present"
+else command -v pipx >/dev/null || { command -v brew >/dev/null && brew install pipx >/dev/null 2>&1; }
+  command -v pipx >/dev/null && { pipx install pixelrag >/dev/null 2>&1 && ok "pixelshot installed" || warn "pixelshot: pipx install pixelrag"; } || warn "no pipx — pipx install pixelrag"
+fi
 
 # 4. Plugins (via the claude CLI) --------------------------------------------
 if command -v claude >/dev/null; then
@@ -124,6 +129,10 @@ if command -v claude >/dev/null; then
   fi
   [ -d "$CLAUDE_DIR/plugins/marketplaces/superpowers-dev" ] && skip "superpowers registered" \
     || warn "superpowers: /plugin marketplace add obra/superpowers"
+  if claude plugin list 2>/dev/null | grep -q "pixelbrowse@pixelrag-plugins"; then skip "pixelbrowse installed"
+  else claude plugin marketplace add StarTrail-org/PixelRAG >/dev/null 2>&1 || true
+    claude plugin install pixelbrowse@pixelrag-plugins >/dev/null 2>&1 && ok "pixelbrowse installed" \
+      || warn "pixelbrowse: /plugin install pixelbrowse@pixelrag-plugins"; fi
 else warn "claude CLI not found — install plugins via /plugin in-app"; fi
 
 # 5. Secrets root: .env.local -> bws -> age key ------------------------------

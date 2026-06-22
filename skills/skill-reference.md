@@ -12,6 +12,8 @@ For *when to use which skill*, see [`CHEATSHEET.md`](./CHEATSHEET.md).
 | **Convex backend-skill** | https://github.com/get-convex/convex-backend-skill | `~/dev/convex-backend-skill` | Convex backend `design` + `quickstart`. Pair with agent-skills when evaluating/using Convex (e.g. the prompt-lab storage spike, ADR-002). |
 | **ponytail** | https://github.com/DietrichGebert/ponytail | `~/dev/ponytail` + Claude Code plugin (`ponytail@ponytail`) | "Lazy senior dev" — forces the minimal solution that works (YAGNI, stdlib-first). Skills: `ponytail`, `-review`, `-audit`, `-debt`. Needs `node` on PATH. |
 | **cursor/plugins** | https://github.com/cursor/plugins | `~/dev/plugins` | Cursor's marketplace (`.cursor-plugin`, *not* a CC marketplace), so I cherry-pick individual skills. Curated set in [`external-skills.list`](./external-skills.list): thermos quality-review, pstack principles, cursor-team-kit PR/CI flow, orchestrate/continual-learning. |
+| **knowledge-work-plugins** | https://github.com/anthropics/knowledge-work-plugins | `~/dev/knowledge-work-plugins` | Anthropic role plugins; cherry-pick data+design via [`knowledge-work-skills.list`](./knowledge-work-skills.list). Rest need enterprise connectors. |
+| **PixelRAG / pixelbrowse** | https://github.com/StarTrail-org/PixelRAG | CC plugin (`pixelbrowse@pixelrag-plugins`) + `pixelshot` CLI (pipx) | "Give Claude eyes": screenshots a page & reads it visually (charts/tables/layout). Full visual-RAG pipeline = separate eval (JAS-12). |
 
 ## Install / update
 
