@@ -32,7 +32,8 @@ bun "$ART" share <file> --slug <slug> [--title "..."] [--visibility private|unli
 slugified. Default visibility `unlisted` (link gets a `?k=` token). Prints the URL — hand it back.
 
 **Update in place:** re-run `share`/`deploy` with the same `--slug` to update an existing app you own
-— same URL + token, no new app. `deploy` also prunes files no longer in the folder. Omitted options
+— same URL + token; each deploy is a new immutable version (dropped files just aren't in it). Undo with
+`artifact rollback <slug>`; preview with `deploy --staging` then `promote`. Omitted options
 are preserved (leave off `--visibility` to keep the current one). A slug you don't own or a retired
 one errors `taken` → pick another.
 

@@ -83,6 +83,11 @@ ok "$m own skills linked"
 [ -d "$DEV/artifact-studio-tools/skills/build-artifact-app" ] \
   && link_skill "$DEV/artifact-studio-tools/skills/build-artifact-app" && ok "build-artifact-app linked"
 
+# Convex skills (get-convex/agent-skills) — well-named, link the convex-* ones.
+for s in convex convex-create-component convex-migration-helper convex-performance-audit convex-quickstart convex-setup-auth; do
+  [ -d "$DEV/agent-skills/skills/$s" ] && link_skill "$DEV/agent-skills/skills/$s"
+done
+
 # 3b. skills.sh — individual third-party skills (symlinked, registry-managed) --
 if command -v skills >/dev/null || command -v npx >/dev/null; then
   # entries: "<repo-url>|<skill-name>"  (add more as you adopt them)
