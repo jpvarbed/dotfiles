@@ -34,7 +34,7 @@ add the always-on process skills on top; this lists the on-demand ones.
 
 ## Verify in the real app
 - **agent-browser** — drive a real browser (navigate, fill, click, screenshot, console/network). Cross-agent UI verifier; powers `/total-tdd`'s test phases.
-- **portless** — stable `https://<name>.localhost` dev URLs. One-time per machine: `portless service install` (auto-starts the proxy at boot; sudo). Then just run `portless` instead of `npm run dev`.
+- **portless** — stable `https://<name>.localhost` dev URLs. One-time per machine: `portless service install` (auto-starts the proxy at boot; sudo). Then just run `portless` instead of `npm run dev`. Worktrees: `portless run` auto-prefixes the branch as a subdomain (`feat-x.golf.localhost`) so main + feature worktrees run side-by-side; explicit `portless <name> …` skips the prefix.
 - **emulate** — offline stateful fakes of Stripe/GitHub/Google/AWS… to verify API-integration code with no network or keys.
 
 ## Understand a codebase
