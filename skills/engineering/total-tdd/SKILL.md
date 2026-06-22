@@ -30,9 +30,11 @@ id,area,user_story,expected_behavior,source,status,issues,fix,verified
    behavior derived from the code, with `source` refs. Status `spec`.
    *Done when every feature has a `spec` row.*
 
-2. **Test.** Exercise each story in the **real running app** (use the `run` /
-   `verify` skills or preview tools — not by reading code). Set `status` `pass` or
-   `fail`; put concrete repro/error in `issues`.
+2. **Test.** Exercise each story in the **real running app** — not by reading code.
+   Drive the UI with **agent-browser** (navigate, fill, click, screenshot, check
+   console/network), serve it at a stable URL via **portless**, and stub external
+   APIs (Stripe/GitHub/AWS…) with **emulate** so integration paths run offline.
+   Set `status` `pass` or `fail`; put concrete repro/error in `issues`.
    *Done when no row is still `spec`.*
 
 3. **Fix.** Fix every `fail` — logic bugs and UX errors both count. Record what

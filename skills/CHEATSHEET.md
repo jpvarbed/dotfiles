@@ -32,6 +32,11 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **review-and-ship** — review branch, run/write tests, commit, open/update PR.
 - **improve-codebase-architecture** — find deepening / refactor opportunities.
 
+## Verify in the real app
+- **agent-browser** — drive a real browser (navigate, fill, click, screenshot, console/network). Cross-agent UI verifier; powers `/total-tdd`'s test phases.
+- **portless** — stable `app.localhost` HTTPS URLs (per git-worktree) so the agent always knows where the dev server is.
+- **emulate** — offline stateful fakes of Stripe/GitHub/Google/AWS… to verify API-integration code with no network or keys.
+
 ## Understand a codebase
 - **how** — how does X work / where should this live / which layer owns it.
 - **why** — why is X this way / design rationale / regression history.

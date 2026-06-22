@@ -77,6 +77,9 @@ if command -v skills >/dev/null || command -v npx >/dev/null; then
     "https://github.com/jakubkrehel/make-interfaces-feel-better|make-interfaces-feel-better"
     "https://github.com/composiohq/awesome-claude-skills|domain-name-brainstormer"
     "https://github.com/schpet/linear-cli|linear-cli"
+    "https://github.com/vercel-labs/agent-browser|agent-browser"   # verify UI in a real browser
+    "https://github.com/vercel-labs/portless|portless"             # stable .localhost dev URLs
+    "https://github.com/vercel-labs/emulate|emulate"               # offline fakes of Stripe/GitHub/AWS…
   )
   # NOTE: only Claude Code natively consumes these global skills. skills.sh reports
   # broad multi-agent support, but Cursor/Gemini/OpenCode have no global-skills dir
@@ -90,6 +93,13 @@ if command -v skills >/dev/null || command -v npx >/dev/null; then
     [ -e "$SKILLS_DIR/$name" ] && ok "$name" || warn "skills.sh failed: $name"
   done
 else warn "no skills CLI or npx — skip skills.sh skills"; fi
+
+# verification CLIs the skills above drive (emulate runs via npx, no global needed)
+if command -v npm >/dev/null; then
+  for c in agent-browser portless; do
+    command -v "$c" >/dev/null && skip "$c present" || { npm i -g "$c" >/dev/null 2>&1 && ok "$c installed" || warn "$c install failed"; }
+  done
+fi
 
 # 4. Plugins (via the claude CLI) --------------------------------------------
 if command -v claude >/dev/null; then
