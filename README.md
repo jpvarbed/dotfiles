@@ -27,6 +27,11 @@ printf 'BWS_ACCESS_TOKEN=%s\n' "<paste from your vault>" > ~/dev/.env.local   # 
 7. Installs/configures the Gemini CLI for `adversarial-review` (api-key auth;
    pulls `GEMINI_API_KEY` from bws).
 
+**One-time per machine (needs sudo, so not in setup.sh):**
+```bash
+portless service install   # auto-start the portless proxy at boot → https://<name>.localhost dev URLs
+```
+
 ## Per-project Claude config
 
 ```bash
