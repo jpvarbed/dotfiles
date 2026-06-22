@@ -59,6 +59,18 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **edit-article** — revise/tighten an existing draft.
 - **unslop** — cut AI tells from any writing.
 
+## Data & analysis  (knowledge-work)
+- **analyze** — answer a data question, from a quick lookup to a full report (golf/finance data).
+- **explore-data** — profile a new dataset: shape, nulls, distributions, quality issues.
+- **statistical-analysis** — trends, outliers, correlations, significance tests.
+- **build-dashboard** — interactive self-contained HTML dashboard (KPI cards, charts, filters).
+- **data-visualization** — publication-quality charts in Python (matplotlib/seaborn/plotly).
+
+## Design / UI  (knowledge-work)
+- **design-critique** — structured feedback on usability, hierarchy, consistency (Figma/screenshot).
+- **accessibility-review** — WCAG 2.1 AA audit (contrast, keyboard nav, target size, screen readers).
+- **ux-copy** — microcopy: button labels, error messages, empty states, confirmations. (Pairs with `make-interfaces-feel-better` under Build & fix.)
+
 ## Meta & utility
 - **write-a-skill** — author a new skill (proper structure + progressive disclosure).
 - **cli-for-agents** — design CLIs that agents can drive reliably.

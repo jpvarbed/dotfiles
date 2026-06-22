@@ -44,6 +44,7 @@ clone https://github.com/get-convex/agent-skills       "$DEV/agent-skills"
 clone https://github.com/get-convex/convex-backend-skill "$DEV/convex-backend-skill"
 clone https://github.com/DietrichGebert/ponytail       "$DEV/ponytail"
 clone https://github.com/cursor/plugins                "$DEV/plugins"
+clone https://github.com/anthropics/knowledge-work-plugins "$DEV/knowledge-work-plugins"  # curated data+design skills
 clone https://github.com/jpvarbed/artifact-studio-tools "$DEV/artifact-studio-tools"  # share-artifact CLI/MCP
 # the share-artifact skill drives this CLI — install its deps
 if [ -d "$DEV/artifact-studio-tools" ] && command -v bun >/dev/null; then
@@ -65,6 +66,13 @@ if [ -f "$LIST" ]; then
     if [ -f "$DEV/plugins/$p/SKILL.md" ]; then link_skill "$DEV/plugins/$p"; n=$((n+1)); else warn "missing: $p"; fi
   done < "$LIST"; ok "$n cursor skills linked"
 else warn "skills/external-skills.list missing"; fi
+KWLIST="$DOTFILES/skills/knowledge-work-skills.list"
+if [ -f "$KWLIST" ]; then
+  say "Linking curated knowledge-work skills"; n=0
+  while IFS= read -r p; do case "$p" in ''|\#*) continue;; esac
+    if [ -f "$DEV/knowledge-work-plugins/$p/SKILL.md" ]; then link_skill "$DEV/knowledge-work-plugins/$p"; n=$((n+1)); else warn "missing: $p"; fi
+  done < "$KWLIST"; ok "$n knowledge-work skills linked"
+fi
 say "Linking dotfiles' own skills"; m=0
 while IFS= read -r -d '' s; do link_skill "$(dirname "$s")"; m=$((m+1)); done \
   < <(find "$DOTFILES/skills" -name SKILL.md -not -path '*/deprecated/*' -print0)

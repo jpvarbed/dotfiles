@@ -1,0 +1,11 @@
+# Curated skills from anthropics/knowledge-work-plugins (~/dev/knowledge-work-plugins),
+# symlinked into ~/.claude/skills by setup.sh. Paths relative to that repo.
+# Cherry-picked (data + design) — the rest are role-plugins needing enterprise connectors.
+data/skills/analyze
+data/skills/explore-data
+data/skills/build-dashboard
+data/skills/data-visualization
+data/skills/statistical-analysis
+design/skills/accessibility-review
+design/skills/design-critique
+design/skills/ux-copy
