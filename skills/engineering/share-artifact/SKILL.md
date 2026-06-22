@@ -29,8 +29,12 @@ bun "$ART" share <file> --slug <slug> [--title "..."] [--visibility private|unli
 ```
 
 `--kind` is inferred from the extension. `--slug` is the URL (`artifacts.jasonv.dev/<slug>/`),
-slugified + globally unique (errors `taken`/`reserved` → pick another). Default visibility `unlisted`
-(link gets a `?k=` token). Prints the URL — hand it back.
+slugified. Default visibility `unlisted` (link gets a `?k=` token). Prints the URL — hand it back.
+
+**Update in place:** re-run `share`/`deploy` with the same `--slug` to update an existing app you own
+— same URL + token, no new app. `deploy` also prunes files no longer in the folder. Omitted options
+are preserved (leave off `--visibility` to keep the current one). A slug you don't own or a retired
+one errors `taken` → pick another.
 
 ## 2b. Deploy a multi-file app — real React, no build step (esm.sh)
 
