@@ -52,7 +52,7 @@ marketplace. Re-run it to pull a new machine into sync.
   - `engineering/jason-prototype-stack` — recipe to ship a new `<thing>.jasonv.dev` app fast
     (bun + Vite/React SPA + Convex + Vercel + Squarespace DNS); built from focus-timer.
   - `knowledge/agentic-engineering` — reading-list KB curator (encrypted; see README).
-  - `engineering/share-artifact` — publish apps/artifacts → `artifacts.jasonv.dev/<slug>/` (drives the `~/dev/artifact-studio-tools` CLI; key from bws).
+  - `engineering/share-artifact` — publish apps/artifacts → `<slug>.jasonv.app` (drives the `~/dev/artifact-studio-tools` CLI; key from bws).
 
 Secrets (`~/dev/.env.local` → bws → age key → `soul.md.age` / `knowledge.tar.age`)
 are handled by `setup.sh`; see the top-level [`README.md`](../README.md).

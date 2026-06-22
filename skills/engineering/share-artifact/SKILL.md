@@ -1,12 +1,12 @@
 ---
 name: share-artifact
-description: Publish/host an app or artifact you built and get a public URL to share. Use after building something (an SVG/diagram, an interactive HTML widget, a Markdown one-pager, or a real multi-file React app via esm.sh) that you want to hand someone as a link, or when the user says "share this", "publish this", "host this", "give me a link", or "deploy this app". Works from ANY project — apps go live at artifacts.jasonv.dev/<slug>/.
+description: Publish/host an app or artifact you built and get a public URL to share. Use after building something (an SVG/diagram, an interactive HTML widget, a Markdown one-pager, or a real multi-file React app via esm.sh) that you want to hand someone as a link, or when the user says "share this", "publish this", "host this", "give me a link", or "deploy this app". Works from ANY project — apps go live at <slug>.jasonv.app.
 ---
 
 # Share / host an app on Artifact Studio
 
 Publishes to **Artifact Studio** (jpvarbed's agent-native app host). Output: a public URL,
-`https://artifacts.jasonv.dev/<slug>/`. Works from any repo — the CLI and key are global.
+`https://<slug>.jasonv.app`. Works from any repo — the CLI and key are global.
 
 **Announce at start:** "Using share-artifact to publish this."
 
@@ -19,7 +19,7 @@ export ARTIFACT_API_KEY=$(bws secret list -o json | python3 -c "import sys,json;
 ```
 
 If `bws` or the token is missing, tell the user to run `~/dev/dotfiles/scripts/setup.sh` (pulls the
-bws token) or to mint a key in the studio Settings (`artifacts.jasonv.dev`) and export it manually.
+bws token) or to mint a key in the studio Settings (`studio.artifacts.jasonv.dev`) and export it manually.
 
 ## 2a. Publish a single file (svg / html / markdown)
 
@@ -28,7 +28,7 @@ ART=~/dev/artifact-studio-tools/cli/src/index.ts
 bun "$ART" share <file> --slug <slug> [--title "..."] [--visibility private|unlisted|public] [--comments]
 ```
 
-`--kind` is inferred from the extension. `--slug` is the URL (`artifacts.jasonv.dev/<slug>/`),
+`--kind` is inferred from the extension. `--slug` is the URL (`<slug>.jasonv.app`),
 slugified. Default visibility `unlisted` (link gets a `?k=` token). Prints the URL — hand it back.
 
 **Update in place:** re-run `share`/`deploy` with the same `--slug` to update an existing app you own
@@ -72,7 +72,7 @@ bun "$ART" delete <slug>   # remove one
 
 ## Notes
 
-- Apps run full-page on their own origin (`artifacts.jasonv.dev/<slug>/`), network allowed, isolated
+- Apps run full-page on their own origin (`<slug>.jasonv.app`), network allowed, isolated
   from the studio's keys. HTML/React apps run their JS live.
 - Same actions are exposed as **MCP tools** (`publish_artifact`, `deploy_app`, `provision_backend`,
   `list/get/delete_artifact`) from `~/dev/artifact-studio-tools/mcp` (env: `ARTIFACT_API_BASE` +

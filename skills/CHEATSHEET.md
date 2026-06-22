@@ -50,7 +50,7 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **linear-cli** — manage Linear issues (personal todos → team `JAS`).
 - **triage** — triage incoming issues through a state machine.
 - **handoff** — compact the conversation into a handoff doc for another agent.
-- **share-artifact** — publish an app/artifact (SVG, HTML, Markdown, multi-file React) → public URL at `artifacts.jasonv.dev/<slug>/`. Drives the artifact-studio-tools CLI; key from bws.
+- **share-artifact** — publish an app/artifact (SVG, HTML, Markdown, multi-file React) → public URL at `<slug>.jasonv.app`. Drives the artifact-studio-tools CLI; key from bws.
 
 ## Writing
 - **writing-fragments** — mine raw nuggets before imposing structure.
