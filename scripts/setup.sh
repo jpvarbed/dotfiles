@@ -70,6 +70,11 @@ while IFS= read -r -d '' s; do link_skill "$(dirname "$s")"; m=$((m+1)); done \
   < <(find "$DOTFILES/skills" -name SKILL.md -not -path '*/deprecated/*' -print0)
 ok "$m own skills linked"
 
+# build-artifact-app lives in the public tools repo (single source); link it too.
+# share-artifact is NOT linked from there — dotfiles owns the bws-keyed variant above.
+[ -d "$DEV/artifact-studio-tools/skills/build-artifact-app" ] \
+  && link_skill "$DEV/artifact-studio-tools/skills/build-artifact-app" && ok "build-artifact-app linked"
+
 # 3b. skills.sh — individual third-party skills (symlinked, registry-managed) --
 if command -v skills >/dev/null || command -v npx >/dev/null; then
   # entries: "<repo-url>|<skill-name>"  (add more as you adopt them)
