@@ -44,6 +44,7 @@ clone https://github.com/get-convex/agent-skills       "$DEV/agent-skills"
 clone https://github.com/get-convex/convex-backend-skill "$DEV/convex-backend-skill"
 clone https://github.com/DietrichGebert/ponytail       "$DEV/ponytail"
 clone https://github.com/cursor/plugins                "$DEV/plugins"
+clone https://github.com/jpvarbed/artifact-studio-tools "$DEV/artifact-studio-tools"  # share-artifact CLI/MCP
 
 # 3. Link skills -> ~/.claude/skills -----------------------------------------
 SKILLS_DIR="$CLAUDE_DIR/skills"; mkdir -p "$SKILLS_DIR"

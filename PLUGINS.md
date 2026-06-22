@@ -36,8 +36,8 @@ any project can publish an app → public URL `https://artifacts.jasonv.dev/<slu
 
 - **Skill:** `skills/engineering/share-artifact/` (auto-linked into `~/.claude/skills` by setup.sh).
   Fetches `ARTIFACT_API_KEY` + `ARTIFACT_API_BASE` from bws on demand; drives the CLI at
-  `~/dev/artifact-share/apps/cli/src/index.ts` (`share` | `deploy` | `backend` | `list/get/delete`).
-- **MCP server:** `~/dev/artifact-share/apps/mcp` (tools `publish_artifact`, `deploy_app`,
+  `~/dev/artifact-studio-tools/cli/src/index.ts` (`share` | `deploy` | `backend` | `list/get/delete`).
+- **MCP server:** `~/dev/artifact-studio-tools/mcp` (tools `publish_artifact`, `deploy_app`,
   `provision_backend`, `list/get/delete_artifact`); env `ARTIFACT_API_BASE` + `ARTIFACT_API_KEY`.
 - **Key:** durable agent key in bws as `ARTIFACT_API_KEY` (owner `jpvarbed`); base in `ARTIFACT_API_BASE`.
   All agent-published apps are owned by `jpvarbed` — manage via `artifact list` or studio.artifacts.jasonv.dev.

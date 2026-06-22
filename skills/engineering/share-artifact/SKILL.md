@@ -24,7 +24,7 @@ bws token) or to mint a key in the studio Settings (`artifacts.jasonv.dev`) and 
 ## 2a. Publish a single file (svg / html / markdown)
 
 ```bash
-ART=~/dev/artifact-share/apps/cli/src/index.ts
+ART=~/dev/artifact-studio-tools/cli/src/index.ts
 bun "$ART" share <file> --slug <slug> [--title "..."] [--visibility private|unlisted|public] [--comments]
 ```
 
@@ -71,8 +71,10 @@ bun "$ART" delete <slug>   # remove one
 - Apps run full-page on their own origin (`artifacts.jasonv.dev/<slug>/`), network allowed, isolated
   from the studio's keys. HTML/React apps run their JS live.
 - Same actions are exposed as **MCP tools** (`publish_artifact`, `deploy_app`, `provision_backend`,
-  `list/get/delete_artifact`) from `~/dev/artifact-share/apps/mcp` (env: `ARTIFACT_API_BASE` +
+  `list/get/delete_artifact`) from `~/dev/artifact-studio-tools/mcp` (env: `ARTIFACT_API_BASE` +
   `ARTIFACT_API_KEY`), and as a REST API at `$ARTIFACT_API_BASE/v1` (`/openapi.json`).
 - All agent-published apps are owned by the shared `jpvarbed` account (the global key) — manage them
   with `artifact list` or in the studio at `studio.artifacts.jasonv.dev`.
-- Repo: `~/dev/artifact-share` (github `jpvarbed/artifact-share`).
+- Tooling repo (clone if missing): `~/dev/artifact-studio-tools` (github
+  `jpvarbed/artifact-studio-tools`) — run `bun install` there once. The service (studio + backend)
+  is the separate `jpvarbed/artifact-share` repo.
