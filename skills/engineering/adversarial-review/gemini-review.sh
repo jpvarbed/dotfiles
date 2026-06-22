@@ -47,5 +47,5 @@ Pay special attention to: $FOCUS"
     cat "$f"
     printf '\n'
   done
-} | gemini --skip-trust -m "$MODEL" -p "$PROMPT" 2>&1 \
+} | gemini --yolo --skip-trust -m "$MODEL" -p "$PROMPT" 2>&1 \
   | grep -viE 'token file corrupted|Loaded cached credentials|Failed to load API key|Both GOOGLE_API_KEY|not running in a trusted|256-color|Ripgrep is not available|^[[:space:]]+at (async|File)'

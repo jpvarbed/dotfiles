@@ -190,4 +190,8 @@ elif [ -n "${BWS_ACCESS_TOKEN:-}" ] && command -v jq >/dev/null; then
   else warn "no GEMINI_API_KEY/GOOGLE_API_KEY in bws — set ~/.gemini/.env manually"; fi
 else warn "can't fetch GEMINI_API_KEY (need bws token + jq)"; fi
 
+# gy alias: gemini YOLO (auto-approve + skip trust) for adversarial-review etc
+if [ -f "$HOME/.zshrc" ] && grep -qF 'alias gy=' "$HOME/.zshrc"; then skip "gy alias present"
+else printf "\n# gemini YOLO (auto-approve + skip trust) — adversarial-review etc\nalias gy='gemini --yolo --skip-trust'\n" >> "$HOME/.zshrc"; ok "added gy alias"; fi
+
 say "Done. Open a new shell to pick up env changes."
