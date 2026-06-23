@@ -81,3 +81,8 @@ Commit the `.age` files and `age-recipient.txt`. Plaintext (`soul.md`,
 
 See [`skills/skill-reference.md`](./skills/skill-reference.md) for the external
 collections I pull from and their sources. My own skills live in `skills/`.
+
+## Dev tools
+
+[`docs/tools.md`](./docs/tools.md) — running log of interesting dev tools (using /
+evaluating / watching), cross-referenced to Linear JAS issues.
