@@ -60,7 +60,7 @@ bun "$ART" backend <slug>      # prints a per-app data key (shown once)
 ```
 
 Embed it and call from the app's frontend (same origin):
-`fetch("/api/kv/<collection>/<key>", { method:"PUT", headers:{ "X-App-Key": KEY }, body: JSON.stringify(v) })`
+`fetch("/api/kv/<collection>/<key>", { method:"PUT", headers:{ "X-Data-Key": KEY }, body: JSON.stringify(v) })`
 (GET returns `{value}`; `/api/kv/<collection>` lists). App-shared by default; add an `X-End-User`
 header (a per-visitor secret) to scope rows privately per visitor (ART-5).
 
