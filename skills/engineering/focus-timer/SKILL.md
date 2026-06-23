@@ -11,19 +11,21 @@ question, or log provenance, and lets the user control the shared Pomodoro timer
 
 **Announce at start:** "Using focus-timer to report to the fleet." (or "to control the timer.")
 
-## 1. Identity (no key, just an id)
+## 1. Auth — a minted key (FOC-23/24/25)
 
-Data is scoped by `FOCUS_USER_ID` — Jason's account id (the web app's `focus_user_id` cookie). Use
-**his** id so you report into the fleet he's watching:
+Agent writes (report/ask/event/recall/learn) authenticate with **`FOCUS_API_KEY`** — a minted
+`ak_…` key (focus web → Settings → Mint key). The owner is derived from the key server-side; no
+cleartext account id is carried, and the key is write-only to Jason's fleet + one-click revocable.
+On Jason's machine it's exported into every shell from bws (`~/.zshrc`), so the CLI/hook just work:
 
 ```bash
-export FOCUS_USER_ID="<jason's focus_user_id>"   # or fetch from bws if stored there:
-# set -a; source ~/dev/.env.local; set +a
-# export FOCUS_USER_ID=$(bws secret list -o json | python3 -c "import sys,json;print(next(s['value'] for s in json.load(sys.stdin) if s['key']=='FOCUS_USER_ID'))")
+export FOCUS_API_KEY=$(bws secret list -o json | jq -r '.[]|select(.key=="FOCUS_API_KEY")|.value' | head -1)
+# Agent writes POST to FOCUS_CONVEX_SITE/agent/* (defaults to the auth deployment's .convex.site).
 ```
 
-Endpoint defaults to prod (`perceptive-butterfly-406`); override with `CONVEX_URL`. No password —
-the id is the capability.
+Timer **control/read** commands (status/start/stats/fleet) still use `FOCUS_USER_ID` against the
+no-auth prod deployment until that surface goes key-native (next slice). The remote MCP takes the
+key via `Authorization: Bearer ak_…` (and `x-focus-user` for control/reads).
 
 ## 2. Report into the fleet (the main agent use)
 
@@ -46,12 +48,14 @@ Guidance for agents:
   `focus_event` (MCP) with `type:"decision"`, a `summary`, and `refs:[{type:"informs",target:"knowledge:<id>"}]`.
   A decision with no `knowledge:` ref is logged as a knowledge-gap (not rejected).
 
-## 3. Auto-report (no manual calls) — CC hook, FOC-12
+## 3. Auto-report (no manual calls) — CC hook, FOC-12/25
 
-To make local Claude Code sessions report presence automatically, install the hook:
-`~/dev/focus-timer-tools/scripts/cc-fleet-hook.py` into `~/.claude/settings.json`
-(SessionStart/UserPromptSubmit→working, Notification→needs_you, Stop/SubagentStop→done). See
-`focus-timer-tools/scripts/README.md`. Semantic asks/decisions still use the MCP/CLI explicitly.
+Already wired on Jason's machine: `~/dev/focus-timer-tools/scripts/cc-fleet-hook.py` runs from
+`~/.claude/settings.json` on SessionStart/UserPromptSubmit→working, Notification→needs_you,
+Stop/SubagentStop→done. It POSTs to `FOCUS_CONVEX_SITE/agent/report` with the `FOCUS_API_KEY`
+exported by `~/.zshrc` — so every CC session in every project auto-reports under his account, with
+no cleartext id. It never blocks CC (no key → no-op, errors swallowed, 3s timeout). Semantic
+asks/decisions still use the MCP/CLI explicitly.
 
 ## 4. Drive the timer (human-facing)
 

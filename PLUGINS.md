@@ -57,7 +57,8 @@ a question, and log decisions; Jason sees who's working / who needs him / what w
   Stop→done). See `scripts/README.md`.
 - **CLI:** `focus` (`focus-timer-tools/cli`) — timer (`status`/`start`/`pause`/`resume`/`skip`/`reset`/
   `stats`/`watch`) + fleet (`fleet`, `report agent= project= [state=] [task=]`, `ask agent= [severity=] "q"`).
-  Env: `FOCUS_USER_ID` (your account id) + optional `CONVEX_URL` (defaults to prod).
+  Env: `FOCUS_API_KEY` (minted key, for fleet/report/ask/learn/recall) + `FOCUS_USER_ID` (for
+  timer control/reads until that surface is keyed) + optional `CONVEX_URL`/`FOCUS_CONVEX_SITE`.
 - **MCP:** hosted `https://mcp.jasonv.dev/api/mcp` (pass your id in the `x-focus-user` header), or local
   stdio (`mcp/src/stdio.ts`). 11 tools: timer (`focus_status/start/pause/resume/skip/reset/stats`) +
   **fleet** (`focus_report`, `focus_ask`, `focus_event`, `focus_fleet`). Registered with ARD at
