@@ -66,6 +66,17 @@ if [ -f "$LIST" ]; then
     if [ -f "$DEV/plugins/$p/SKILL.md" ]; then link_skill "$DEV/plugins/$p"; n=$((n+1)); else warn "missing: $p"; fi
   done < "$LIST"; ok "$n cursor skills linked"
 else warn "skills/external-skills.list missing"; fi
+# 3a. Link agents -> ~/.claude/agents (some plugins ship subagents their skills dispatch) ----
+# A skill that calls `subagent_type: "x"` needs the agent def in ~/.claude/agents; link_skill alone
+# (above) only installs the orchestrator skill, not the workers it fans out to.
+AGENTS_DIR="$CLAUDE_DIR/agents"; mkdir -p "$AGENTS_DIR"
+link_agent() { ln -sfn "$1" "$AGENTS_DIR/$(basename "$1")"; }
+if [ -d "$DEV/plugins/thermos/agents" ]; then
+  say "Linking thermos review subagents"; na=0
+  for a in "$DEV/plugins/thermos/agents"/*.md; do [ -f "$a" ] && link_agent "$a" && na=$((na+1)); done
+  ok "$na thermos agents linked"
+fi
+
 KWLIST="$DOTFILES/skills/knowledge-work-skills.list"
 if [ -f "$KWLIST" ]; then
   say "Linking curated knowledge-work skills"; n=0
