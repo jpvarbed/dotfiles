@@ -41,6 +41,9 @@ CLI (from `~/dev/focus-timer-tools`) or the hosted MCP at `https://mcp.jasonv.de
 FOC=~/dev/focus-timer-tools/cli/src/index.ts
 bun "$FOC" report agent=<id> project=<name> [state=working|needs_you|done] [task=<title>]
 bun "$FOC" ask    agent=<id> [severity=soft|hard] "your question for Jason"
+bun "$FOC" recall "how do we anchor P4"               # find prior knowledge to cite
+bun "$FOC" learn  "Title" body="…" [tags=a,b]         # capture a concept → knowledge:<slug>
+bun "$FOC" decide "what you decided" cites=knowledge:<slug>[,knowledge:<slug>]   # the lineage
 bun "$FOC" fleet                       # show the board: agents by project/task + open asks
 ```
 
@@ -49,9 +52,12 @@ Guidance for agents:
   2+ agents on one workstream.
 - `ask` for anything needing Jason: **soft** = can wait (held during his focus block, surfaces at his
   break); **hard** = you're blocked, pierces now. Don't mark everything hard.
-- Record a provenance **decision** at real forks, citing the knowledge you used (so work is traceable):
-  `focus_event` (MCP) with `type:"decision"`, a `summary`, and `refs:[{type:"informs",target:"knowledge:<id>"}]`.
-  A decision with no `knowledge:` ref is logged as a knowledge-gap (not rejected).
+- **At a real fork, `decide`.** Before deciding, `recall` to find prior knowledge; if it's new, `learn`
+  it; then `decide "…" cites=knowledge:<slug>`. The cite becomes the graph's `decision —INFORMS→ knowledge`
+  lineage — the whole point of the provenance graph. A decision with no cite is logged as a knowledge-gap
+  (not rejected), so cite when you can. (MCP equivalent: `focus_event type:"decision"` with `refs`.)
+- **Commits auto-capture** — the CC hook records commits you make during a session as `output` events
+  (agent→produces→commit), so you don't log routine output by hand; reserve `decide` for the reasoning.
 
 ## 3. Auto-report (no manual calls) — CC hook, FOC-12/25
 
