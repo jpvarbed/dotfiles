@@ -9,6 +9,6 @@ TOKEN="$(sed -nE 's/^(export )?(BWS_ACCESS_TOKEN|BITWARDEN_ACCESS_TOKEN)="?([^"]
 eval "$(BWS_ACCESS_TOKEN="$TOKEN" bws secret list -o json 2>/dev/null \
   | jq -r '.[] | select(.key=="NEO4J_URI" or .key=="NEO4J_USERNAME" or .key=="NEO4J_PASSWORD" or .key=="FOCUS_API_KEY") | "export \(.key)=\(.value|@sh)"')"
 [ -n "$FOCUS_API_KEY" ] && [ -n "$NEO4J_URI" ] || exit 0
-export FOCUS_CONVEX_SITE="${FOCUS_CONVEX_SITE:-https://vivid-ant-124.convex.site}"
+export FOCUS_CONVEX_SITE="${FOCUS_CONVEX_SITE:-https://perceptive-butterfly-406.convex.site}"
 cd "$HOME/dev/focus-timer-tools" || exit 1
 exec bun scripts/graph.ts sync
