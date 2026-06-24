@@ -16,7 +16,12 @@ question, or log provenance, and lets the user control the shared Pomodoro timer
 Agent writes (report/ask/event/recall/learn) authenticate with **`FOCUS_API_KEY`** — a minted
 `ak_…` key (focus web → Settings → Mint key). The owner is derived from the key server-side; no
 cleartext account id is carried, and the key is write-only to Jason's fleet + one-click revocable.
-On Jason's machine it's exported into every shell from bws (`~/.zshrc`), so the CLI/hook just work:
+On Jason's machine it's loaded from bws two ways so the CLI/hook just work everywhere:
+- **Terminal-launched** (`~/.zshrc`): exported into every interactive shell.
+- **GUI-launched** (Claude desktop, IDEs — don't source `.zshrc`): a LaunchAgent
+  (`macos/LaunchAgents/dev.jasonv.focus-key.plist` → `scripts/focus-key-load.sh`) runs at login
+  and `launchctl setenv`s it into the GUI session, so apps started afterward inherit it. Both read
+  the bws token transiently from `~/dev/.env.local`; only `FOCUS_API_KEY` ever enters the env.
 
 ```bash
 export FOCUS_API_KEY=$(bws secret list -o json | jq -r '.[]|select(.key=="FOCUS_API_KEY")|.value' | head -1)
