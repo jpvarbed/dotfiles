@@ -19,6 +19,7 @@ Status: **✅ using** · **🔬 evaluating** (JAS#) · **👀 watching**. Add a 
 |---|---|---|
 | [gemini CLI](https://github.com/google-gemini/gemini-cli) | Independent second model for `adversarial-review` / `visual-critique` (`gy` alias = `--yolo --skip-trust`) | ✅ using |
 | [ast-grep](https://github.com/ast-grep/ast-grep) | Structural (AST) code search & rewrite — multi-language | 🔬 (JAS-1) |
+| [apple/container](https://github.com/apple/container) | Local Linux containers as lightweight VMs on Apple Silicon (Docker Desktop alt; local counterpart to CF Sandbox) | 🔬 (JAS-16) |
 
 ## Storage / data / RAG
 | Tool | What | Status |
