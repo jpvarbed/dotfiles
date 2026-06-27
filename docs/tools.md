@@ -13,6 +13,7 @@ Status: **✅ using** · **🔬 evaluating** (JAS#) · **👀 watching**. Add a 
 | [pixelbrowse / PixelRAG](https://github.com/StarTrail-org/PixelRAG) | pixelbrowse = "give Claude eyes" (read a page visually); visual-RAG pipeline | ✅ pixelbrowse · 🔬 RAG (JAS-12) |
 | [agent-native + Clips](https://github.com/BuilderIO/agent-native) | Framework for agent-native apps (one action → UI/agent/MCP/CLI). Clips = agent-readable Loom | 🔬 (JAS-13 golf video) |
 | ponytail / superpowers | "Lazy senior dev" + process backbone (TDD/debug/brainstorm) plugins | ✅ using |
+| [claude-memory-health](https://github.com/alexknowshtml/claude-memory-health) | Audit MEMORY.md (bloat/orphans/staleness) + demote stale notes to cold storage (200-line load cliff) | ✅ tried — flagged D2R inline bloat |
 
 ## Verify / build / run
 | Tool | What | Status |
