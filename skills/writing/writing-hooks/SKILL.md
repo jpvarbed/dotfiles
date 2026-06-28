@@ -1,0 +1,66 @@
+---
+name: writing-hooks
+description: 'Personal compilation of hook and social-post writing gotchas (X/LinkedIn) in Jason''s voice. Use alongside avoid-ai-writing and the motion hook skills (hook-writing, hook-tactics, hook-voice-patterns) when drafting or editing tweets, threads, and hooks. Catches the tells those skills miss and enforces a plain, finding-first voice. Trigger when writing or cleaning a tweet, thread, or hook.'
+---
+
+# writing-hooks — gotchas for hooks, in my voice
+
+A companion to two other skills, not a replacement. Run it last.
+
+- **avoid-ai-writing** — general AI-isms (em dashes, vocab tiers, filler, structure).
+- **motion hook skills** (hook-writing, hook-tactics, hook-voice-patterns) — hook angle and triggers.
+
+This file is the third pass: the specific tells those two miss, plus how my hooks should sound.
+
+## The principle
+
+The hook is the most surprising true thing you already wrote, moved to the front and
+tightened. Don't manufacture it. If you have to invent drama, you buried the real finding.
+
+Read-aloud test: would I say this sentence to another engineer? If it sounds like ad copy, cut it.
+
+## Voice
+
+- Terse, technical, first person. State the finding flat.
+- No clickbait personas, no manufactured stakes.
+- Plain words over business-speak.
+- One concrete claim per line. Cite the specific thing.
+
+## Gotchas (kill these in hooks)
+
+Each one is a tell we actually hit, with the fix.
+
+**Throat-clear before the point** — soft setups that delay the point to fake anticipation:
+"One thing that reliably helps:", "The thing that…", "Here's what works:", "What I found is:".
+Cut the setup, lead with the point.
+- Before: "One thing that reliably helps: specifying an output format."
+- After: "Specifying an output format helps."
+
+**Business-speak** — lever, move the needle, unlock, supercharge, leverage. Use the plain verb.
+- "One lever that works" → "Specifying an output format helps."
+
+**Claimed emotion** — "what surprised me", "better than I expected", "I was fascinated to find".
+If it's surprising, the fact carries it. Cut the claim.
+
+**Manufactured drama** — "a skill that refuses to", "the fix for lazy agents was an HTML
+report", a tease dressed as a hook. Lead with the actual finding instead.
+
+**Markdown in tweets** — `*italics*` and `**bold**` render as literal asterisks on X, and `#`
+makes a hashtag, not a header. Never use markdown emphasis in a post.
+
+**Em dashes in posts** — use a period or colon. avoid-ai-writing flags these too; for posts
+it's a hard rule.
+
+**real / actual as an intensifier** — "the real bottleneck", "actual tests run". Name what
+makes it so, or drop the word.
+
+## Process
+
+1. Draft in my own words.
+2. hook-writing / hook-tactics: pick the angle, lead with the most surprising true line.
+3. This file: kill the gotchas above; check it reads like I said it out loud.
+4. avoid-ai-writing (linkedin profile): final pass for general isms and length.
+
+---
+
+Keep appending gotchas here as we hit them — this is a running list, not a finished one.
