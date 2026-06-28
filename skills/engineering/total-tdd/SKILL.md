@@ -40,6 +40,16 @@ id,area,user_story,expected_behavior,source,status,issues,fix,verified
 - `status`: `spec` → `pass` / `fail` → `fixed` → `verified`.
 - Keep ONE canonical file. Never fork copies. Append/update rows in place.
 
+## Report — `docs/feature-audit.html`
+
+Each phase, render the CSV to a single self-contained HTML report and keep it in sync.
+Match the bundled `reference-report.html` (same columns, a per-status tally, status
+colors). The CSV stays canonical; the HTML is its rendered view.
+
+The report is also the forcing function: having to fill one row per feature with a real
+status and observed evidence is what stops the agent from skipping verification — an
+empty cell is a visible gap, so every story gets exercised.
+
 ## Phases (advance only when every row is terminal for the phase)
 
 1. **Inventory + spec.** Walk the whole app (routes, components, commands, APIs,
@@ -71,6 +81,7 @@ id,area,user_story,expected_behavior,source,status,issues,fix,verified
 - The CSV is canonical and append-only-in-place: update the existing row, don't
   duplicate. It survives across sessions — that's how the loop resumes.
 - Report each phase as a one-line tally: `N total · spec/pass/fail/fixed/verified counts`.
+- Re-render `docs/feature-audit.html` from the CSV at the end of each phase; never let it drift.
 - Scope creep is fine for *finding* issues across features; keep each *fix* diff tight.
 
 ## Resuming
