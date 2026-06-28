@@ -24,7 +24,7 @@ curl -s https://api.linear.app/graphql -H "Authorization: $KEY" -H "Content-Type
   -d '{"query":"{ issues(filter:{team:{key:{eq:\"JAS\"}}, state:{type:{nin:[\"completed\",\"canceled\"]}}}, first:30){ nodes { identifier title priority state{name} } } }"}' \
   | jq -r '.data.issues.nodes[]? | "\(.identifier) [P\(.priority)] — \(.title)"'
 ```
-Show the top 4–6 by priority (P0/P1 first; note Linear priority 1=Urgent…4=Low). Collapse a long tail into one muted "+ N more eval issues" chip.
+Show the top 4–6 by priority. **Linear priority: 1=Urgent, 2=High, 3=Normal, 4=Low, 0=None** — so order `1→2→3→4` then `0` last (`0` is *unset*, NOT top priority; don't render it as urgent). Collapse a long tail into one muted "+ N more eval issues" chip.
 
 **Blocked on you.** Items only the user can clear — scan for:
 - leaked / rotated secrets (anything flagged compromised this session),
