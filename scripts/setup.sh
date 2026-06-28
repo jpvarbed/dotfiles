@@ -110,6 +110,11 @@ if command -v skills >/dev/null || command -v npx >/dev/null; then
     "https://github.com/vercel-labs/portless|portless"             # stable .localhost dev URLs
     "https://github.com/vercel-labs/emulate|emulate"               # offline fakes of Stripe/GitHub/AWS…
     "https://github.com/conorbronsdon/avoid-ai-writing|avoid-ai-writing"  # de-AI-ify writing (detector + score)
+    "https://github.com/motion-creative/skills|hook-writing"              # marketing copy: hooks/ads/UGC
+    "https://github.com/motion-creative/skills|hook-voice-patterns"
+    "https://github.com/motion-creative/skills|hook-tactics"
+    "https://github.com/motion-creative/skills|ad-concept-generator"
+    "https://github.com/motion-creative/skills|ugc-scriptwriter"
   )
   # NOTE: only Claude Code natively consumes these global skills. skills.sh reports
   # broad multi-agent support, but Cursor/Gemini/OpenCode have no global-skills dir

@@ -14,6 +14,8 @@ For *when to use which skill*, see [`CHEATSHEET.md`](./CHEATSHEET.md).
 | **cursor/plugins** | https://github.com/cursor/plugins | `~/dev/plugins` | Cursor's marketplace (`.cursor-plugin`, *not* a CC marketplace), so I cherry-pick individual skills. Curated set in [`external-skills.list`](./external-skills.list): thermos quality-review, pstack principles, cursor-team-kit PR/CI flow, orchestrate/continual-learning. |
 | **knowledge-work-plugins** | https://github.com/anthropics/knowledge-work-plugins | `~/dev/knowledge-work-plugins` | Anthropic role plugins; cherry-pick data+design via [`knowledge-work-skills.list`](./knowledge-work-skills.list). Rest need enterprise connectors. |
 | **PixelRAG / pixelbrowse** | https://github.com/StarTrail-org/PixelRAG | CC plugin (`pixelbrowse@pixelrag-plugins`) + `pixelshot` CLI (pipx) | "Give Claude eyes": screenshots a page & reads it visually (charts/tables/layout). Full visual-RAG pipeline = separate eval (JAS-12). |
+| **avoid-ai-writing** | https://github.com/conorbronsdon/avoid-ai-writing | skills.sh `avoid-ai-writing` | De-AI editor with a deterministic detector (0–100 score). Won a bake-off vs `unslop` (culled). |
+| **motion-creative/skills** | https://github.com/motion-creative/skills | skills.sh (5 skills) | Marketing copy: hook-writing, hook-voice-patterns, hook-tactics, ad-concept-generator, ugc-scriptwriter. Situational (GTM). |
 
 ## Install / update
 
