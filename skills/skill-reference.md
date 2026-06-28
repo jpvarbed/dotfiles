@@ -49,15 +49,34 @@ marketplace. Re-run it to pull a new machine into sync.
 - **Convex** skills: clone the repo, then point your agent's skills dir at its
   `skills/` (or copy the ones you want). Auth needs `CONVEX_PAT` (in Bitwarden SM
   project `pnw-golf-ai`; backup in `~/dev/.env.local`).
-- **My own skills** (this folder): each is `skills/<category>/<name>/SKILL.md`,
-  symlinked into `~/.claude/skills` by setup.sh.
-  - `engineering/adversarial-review` — Gemini-CLI red-team of a plan/spec/diff.
+- **My own skills** (this folder, 13): each is `skills/<category>/<name>/SKILL.md`,
+  symlinked into `~/.claude/skills` by setup.sh (the linker globs `**/SKILL.md` and
+  names by basename — category folders are for humans, not the linker).
+
+  **engineering** (build & ship)
+  - `engineering/jason-prototype-stack` — ship a new `<thing>.jasonv.dev` app fast (bun + Vite/React SPA + Convex + Vercel); built from focus-timer.
+  - `engineering/mcp-dev` — build/debug MCP servers.
   - `engineering/total-tdd` — whole-app audit→test→fix loop; one canonical feature-audit CSV.
-  - `engineering/jason-prototype-stack` — recipe to ship a new `<thing>.jasonv.dev` app fast
-    (bun + Vite/React SPA + Convex + Vercel + Squarespace DNS); built from focus-timer.
+  - `engineering/share-artifact` — publish apps/artifacts → `<slug>.jasonv.app` (drives `~/dev/artifact-studio-tools`; key from bws).
+  - `engineering/focus-timer` — drive the focus-timer Pomodoro CLI/app.
+
+  **meta** (skill / agent tooling)
+  - `meta/linting-and-scoring` — score a skill against the 40-check binary rubric → tier.
+  - `meta/determinize-refactor` — plan moving a skill's prose into scripts/contracts (script-mode).
+
+  **review** (critique & red-team)
+  - `review/adversarial-review` — Gemini-CLI red-team of a plan/spec/diff.
+  - `review/visual-critique` — structured critique of a rendered image/figure.
+
+  **knowledge**
   - `knowledge/agentic-engineering` — reading-list KB curator (encrypted; see README).
-  - `engineering/share-artifact` — publish apps/artifacts → `<slug>.jasonv.app` (drives the `~/dev/artifact-studio-tools` CLI; key from bws).
-  - `productivity/env-status-board` — "where are we" status board (shipped / open JAS / blocked) via the viz tool; fetches JAS over the Linear GraphQL API.
+
+  **productivity**
+  - `productivity/env-status-board` — "where are we" status board (shipped / open JAS / blocked) via the viz tool; JAS over the Linear GraphQL API.
+  - `productivity/caveman` — ultra-terse output mode.
+
+  **writing**
+  - `writing/writing-hooks` — Jason's voice for tweets/threads/hooks (pairs with avoid-ai-writing).
 
 Secrets (`~/dev/.env.local` → bws → age key → `soul.md.age` / `knowledge.tar.age`)
 are handled by `setup.sh`; see the top-level [`README.md`](../README.md).

@@ -30,7 +30,7 @@ feed it, so include the rationale, not just the conclusions.
 ### 2. Run the review
 
 ```bash
-skills/engineering/adversarial-review/gemini-review.sh \
+skills/review/adversarial-review/gemini-review.sh \
   --focus "the specific bets you most want attacked" \
   path/to/ADR.md path/to/tasks.md
 ```

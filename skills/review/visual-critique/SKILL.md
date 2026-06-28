@@ -24,7 +24,7 @@ Save or copy the target render/image into the workspace (e.g., inside `public/` 
 Call the visual critique script, passing the image path and a specific focus or expectation:
 
 ```bash
-skills/engineering/visual-critique/gemini-visual-critique.sh \
+skills/review/visual-critique/gemini-visual-critique.sh \
   --focus "Verify the knee flex (address knee line) and check if the pelvis looks squatted" \
   public/hackmotion/clubface-proof/fwd-check.png
 ```
