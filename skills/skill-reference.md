@@ -7,7 +7,7 @@ For *when to use which skill*, see [`CHEATSHEET.md`](./CHEATSHEET.md).
 | Collection | Git | Local clone | What / why |
 |---|---|---|---|
 | **Superpowers** | https://github.com/obra/superpowers | `~/dev/superpowers` + installed as a Claude Code plugin at `~/.claude/plugins/marketplaces/superpowers-dev` | TDD / debugging / brainstorming / writing-plans / subagent-driven-dev + hooks. The process backbone. |
-| **mattpocock/skills** | https://github.com/mattpocock/skills | `~/dev/mattpocockskills` | Engineering workflow: `grill-me`, `to-issues`, `to-prd`, `triage`, `handoff`, `prototype`, `diagnose`, `zoom-out`. Small, composable. |
+| **mattpocock/skills** | https://github.com/mattpocock/skills | `~/dev/mattpocockskills` (git clone — `git pull` to update) | Engineering workflow: `grilling`, `to-issues`, `to-prd`, `triage`, `handoff`, `prototype`, `diagnosing-bugs`, `domain-modeling`, `codebase-design`, `implement`. `caveman` preserved as own skill (upstream dropped it). |
 | **Convex agent-skills** | https://github.com/get-convex/agent-skills | `~/dev/agent-skills` | Building on Convex: `convex`, `convex-quickstart`, `convex-create-component`, `convex-setup-auth`, `convex-migration-helper`, `convex-performance-audit`. |
 | **Convex backend-skill** | https://github.com/get-convex/convex-backend-skill | `~/dev/convex-backend-skill` | Convex backend `design` + `quickstart`. Pair with agent-skills when evaluating/using Convex (e.g. the prompt-lab storage spike, ADR-002). |
 | **ponytail** | https://github.com/DietrichGebert/ponytail | `~/dev/ponytail` + Claude Code plugin (`ponytail@ponytail`) | "Lazy senior dev" — forces the minimal solution that works (YAGNI, stdlib-first). Skills: `ponytail`, `-review`, `-audit`, `-debt`. Needs `node` on PATH. |

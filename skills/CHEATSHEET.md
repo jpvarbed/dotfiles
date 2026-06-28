@@ -8,6 +8,8 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **grill-with-docs** — same, but challenged against the project's docs + glossary.
 - **prototype** — throwaway prototype to flesh out a design before committing.
 - **architect** — sketch types, signatures, module structure before writing code.
+- **domain-modeling** — pin down domain terminology / ubiquitous language + record ADRs.
+- **codebase-design** — deep-module design vocabulary; where seams go, testability.
 - **to-prd** — turn the current conversation into a PRD.
 - **to-issues** — break a plan/PRD into independently-grabbable tracker issues.
 - **jason-prototype-stack** — stand up a new `<thing>.jasonv.dev` app fast.
@@ -15,7 +17,8 @@ add the always-on process skills on top; this lists the on-demand ones.
 ## Build & fix
 - **tdd** — red-green-refactor for a feature or bugfix.
 - **total-tdd** — whole-app audit → test → fix → re-test loop (one canonical CSV).
-- **diagnose** — disciplined loop for a hard bug or perf regression.
+- **diagnosing-bugs** — disciplined loop for a hard bug or perf regression.
+- **implement** — implement a piece of work from a PRD or set of issues.
 - **deslop** — strip AI-generated code slop.
 - **typescript-best-practices** — when reading/editing `.ts`/`.tsx`.
 - **make-interfaces-feel-better** — UI polish, micro-interactions, visual detail.
@@ -72,8 +75,9 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **ux-copy** — microcopy: button labels, error messages, empty states, confirmations. (Pairs with `make-interfaces-feel-better` under Build & fix.)
 
 ## Meta & utility
-- **write-a-skill** — author a new skill (proper structure + progressive disclosure).
+- **writing-great-skills** — author/edit skills well (structure + progressive disclosure).
 - **cli-for-agents** — design CLIs that agents can drive reliably.
 - **domain-name-brainstormer** — name ideas + TLD availability.
-- **caveman** — ultra-terse output mode. **zoom-out** — step back for higher-level context.
+- **caveman** — ultra-terse output mode (own skill; upstream dropped it).
+- **resolving-merge-conflicts** — resolve an in-progress git merge/rebase conflict.
 - **obsidian-vault** — Obsidian notes. **git-guardrails-claude-code** / **setup-pre-commit** — repo setup.
