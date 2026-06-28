@@ -1,68 +1,137 @@
 ---
 name: linting-and-scoring
-description: Lint and score a skill against a binary decomposed rubric — unambiguous pass/fail checks across ~11 categories, then a pass-rate → tier → action verdict. Use when reviewing a skill's quality, deciding whether a new/edited skill is good enough, or auditing the skill library. Two reviewers should reach the same verdict.
+description: Lint and score a skill against a 40-check binary decomposed rubric across 11 categories (description, steps, code, error handling, env detection, tests, verification, docs, scope, interaction, cross-harness), then a pass-rate → tier verdict. Use when the user says "lint this skill", "score this skill", "review this skill", "lint and score", or "audit the skill library". NOT for live end-to-end behavior testing (use a runtime eval harness) or for general code review (use "review"). Pairs with determinize-refactor and writing-great-skills.
 ---
 
 # Linting & scoring a skill (binary decomposed rubric)
 
-Score a skill with **binary pass/fail checks** across the categories below. Each
-check is phrased so two reviewers reach the same verdict — no vibes. Skip a whole
-category as **N/A** when it genuinely doesn't apply.
-
-> v1, reconstructed from reference screenshots (`~/Downloads/IMG_9541–9544`). Refine
-> the exact checks against the originals; the structure + scoring are faithful.
+Score a skill against **40 binary pass/fail checks across 11 categories**. Each check is
+phrased so two reviewers reach the same verdict — no vibes. Mark a check (or a whole
+category) **N/A** only when the rule genuinely doesn't apply, and exclude N/A from the
+denominator.
 
 ## Input
-`Path:` $ARGUMENTS — a SKILL.md, a skill dir, or a plugin dir.
+`Path:` $ARGUMENTS — a SKILL.md, a skill dir, or a plugin dir. If none provided, ask for the
+skill directory path.
 
 ## Step 1 — Read the skill
-Read `SKILL.md`, any reference files, and any scripts in the target. Cite the specific
-text for each check as evidence.
+1. Read `SKILL.md` in the target directory.
+2. Read all files in `references/` if present.
+3. List all files in `scripts/` if present.
+4. Read `test*.py` files to assess test quality.
 
-## Step 2 — Evaluate (binary checks; mark PASS / FAIL / N/A with a one-line reason)
+Cite the specific text from `SKILL.md` as evidence for each check.
 
-**Description & triggers** — does the `description` say what it does AND when to use it
-(concrete trigger phrases/keywords)? Third person? ≤1024 chars? Distinct from sibling skills?
+## Step 2 — Evaluate (mark each PASS / FAIL / N/A with a one-line reason)
 
-**Structure** — `SKILL.md` present + valid frontmatter (`name`, `description`)? Under ~100
-lines (else split via progressive disclosure)? Consistent terminology? Concrete examples?
+### Description & triggers (5)
+1. Description contains ≥3 trigger phrases in quotes.
+2. Description contains a negative ("Use when… NOT when…", or "For X use Y instead").
+3. Description includes both purpose and triggers.
+4. Description is < 1024 characters.
+5. Description names sibling skills by name (not just "use another skill").
 
-**Environment detection** — does it detect/declare its prerequisites (tools, runtime, auth)
-rather than assume them? Fails loudly if a dependency is missing?
+### Step structure (5)
+1. Steps are numbered (`## Step N` or a numbered list), not bulleted.
+2. Each step has a single clear objective (not multiple actions combined).
+3. Steps include concrete commands (not vague descriptions like "process the data").
+4. Steps include a verification/confirmation mechanism.
+5. Steps follow a logical order (gather context before processing, validate before shipping).
 
-**Test coverage** — non-trivial logic leaves a runnable check (demo/self-test)? Claims are
-verifiable, not asserted?
+### Code examples (3)
+1. Contains ≥1 concrete, copy-pasteable code block (not pseudocode).
+2. Code blocks show actual commands/calls, not templates (not "{placeholder}" only).
+3. Examples match the skill's `allowed-tools` (no Bash command shown if Bash isn't allowed).
 
-**Verification steps** — does it require evidence before "done" (run it, show output) rather
-than claim success?
+### Error handling (4) «CRITICAL»
+1. An error-recovery table exists (markdown table with `| Issue/Error | Fix |` columns).
+2. The table covers ≥3 distinct failure modes (not a generic "something went wrong").
+3. Each failure mode has a concrete fix action (not "check the logs" or "try again").
+4. ≥1 failure covers tool/MCP unavailability or auth issues.
 
-**Documentation & references** — bundled content correct + one-level-deep? Links resolve?
-No stale/time-sensitive facts?
+### Environment detection (4)
+1. If it references OS-specific deps (e.g. `brew`, `launchctl`, `screencapture`), it has a platform guard.
+2. If it behaves differently per repo type, it has repo-detection logic.
+3. If it uses external CLIs, detection is end-to-end (actually runs the tool and checks output, not just "command exists").
+4. If it's cross-platform, repo-agnostic, and uses no external CLIs → mark all 4 PASS (N/A).
 
-**Reusability** — works from any project / not hardcoded to one repo? Parameters over magic
-values?
+### Test coverage (3)
+1. Every `.py` script in `scripts/` has a corresponding `test_*.py`.
+2. ≥1 test confirms success (output check, file exists, assertion passes).
+3. If there's no `scripts/` directory → mark all 3 PASS (N/A).
 
-**User interaction** — clear inputs, sensible defaults, doesn't block on the human for
-reversible work?
+### Verification steps (3)
+1. SKILL.md has a way to confirm success (output check, file exists, test passes).
+2. Destructive/irreversible actions require a confirmation before execution.
+3. The final output format is specified (table, markdown, file path, etc.).
 
-**Cross-harness compatibility** — avoids tool names/assumptions specific to one agent where
-it doesn't need them? Degrades gracefully?
+### Documentation & references (3)
+1. SKILL.md body is under 500 lines (detail lives in `references/`).
+2. Referenced files (`references/*.md`) actually exist on disk.
+3. Frontmatter uses only allowed fields (`name`, `description`, `allowed-tools`, `argument-hint`, `license`, `compatibility`, `metadata`).
 
-(Add categories the source rubric lists; keep every check binary.)
+### Scope & reusability (3)
+1. Clear scope boundary — what it does AND what it explicitly does not do.
+2. Not hardcoded to a single service/repo/team — parameterized or configurable.
+3. MCP tool names are fully qualified (e.g. `mcp__server__tool`).
 
-## Step 3 — Score
+### User interaction (3)
+1. Asks the user for input/confirmation at least once (not fully autonomous with no guardrails).
+2. Presents options/findings before taking destructive actions.
+3. Gives enough context for the user to decide (not just "Proceed? Y/N").
+
+### Cross-harness compatibility (4)
+1. MCP calls have a fallback for when the agent CLI isn't on PATH (web/cloud harnesses).
+2. Polling/waiting uses bounded loops with an explicit max-attempts (no unbounded `while true`).
+3. Noise from harness hooks (e.g. a nonzero exit code that some harnesses inject) is documented and handled.
+4. If it uses scheduling/monitor tools, it has a fallback for harnesses where those are unavailable.
+
+## Step 3 — Calculate score
 ```
-pass_rate = checks_passed / total_applicable_checks   # skip N/A categories
+pass_rate = checks_passed / total_applicable_checks   # exclude N/A from the denominator
 ```
-Map to a tier + action:
 
 | Pass rate | Tier | Action |
 |---|---|---|
-| ≥ 0.9 | Ship | use as-is |
-| 0.75–0.9 | Polish | fix the failed checks, then ship |
-| 0.5–0.75 | Rework | structural gaps — revise before relying on it |
-| < 0.5 | Reject | rebuild or cull |
+| ≥ 90% | Ship Ready | All critical checks pass — ready to ship |
+| 70–89% | Polish Needed | Fix failing checks, re-eval |
+| < 70% | Rethink | Structural issues — consider a redesign |
 
-Output: the per-category checklist (PASS/FAIL/N/A + reason), the pass rate, the tier, and
-the top 3 fixes. Pairs with `determinize-refactor` (make a passing skill cheaper/more
-deterministic) and `writing-great-skills`.
+**Quality gate:** every Error-handling check is «CRITICAL» and must pass regardless of overall
+score. If any fails, the skill **cannot** be "Ship Ready" even at ≥90%.
+
+> This rubric is LLM-judged, not ground truth — a consistent quality signal, not a certificate.
+
+## Step 4 — Present results
+
+**Scorecard** (one row per category):
+
+| Category | Checks | Passed | Failed | Failing checks |
+|---|---|---|---|---|
+| Description & triggers | 5 | … | … | … |
+| … | … | … | … | … |
+| **Total** | **40** | **X** | **Y** | **pass_rate% — Tier** |
+
+**Failed checks** — for each FAIL: `| Category | Check | Evidence | Fix |`.
+
+**Top 3 recommendations** — the most impactful fixes, specific and actionable.
+
+## Step 5 — Model card (optional)
+If `model-card.yaml` exists in the skill dir, append the result:
+```yaml
+evaluations:
+  - eval_type: binary-decomposed
+    date: <today>
+    score: "X/Y (Z%)"
+    tier: <Ship Ready|Polish Needed|Rethink>
+```
+Also append to `score_history`, and flag **REGRESSION** if the score dropped vs the previous entry.
+
+## Errors
+
+| Issue | Fix |
+|---|---|
+| No path given | Ask the user for the skill directory before scoring. |
+| Target has no `scripts/` | Mark Test coverage (3) N/A — don't fail it. |
+| Can't tell if a check passes | Default to FAIL and note the ambiguity; binary means no benefit of the doubt. |
+| Skill targets one harness only | Score Cross-harness against that harness; note reduced portability in recommendations. |
