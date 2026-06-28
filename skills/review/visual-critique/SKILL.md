@@ -36,3 +36,14 @@ skills/review/visual-critique/gemini-visual-critique.sh \
 The final report only includes findings verified by at least 2 of the 3 runs. Use these to debug your math:
 * **Check the Coordinate Order:** If the model reports a "broken/twisted spine" under turn, check if your rotation order is rotating the tilt axis.
 * **Check Bone vs. Proxy Measurement:** If the model reports a visual posture match but the measured metric is off, calibrate the measurement engine using the actual 3D bone orientation rather than 2D/projected proxies.
+
+## Errors
+
+| Issue | Fix |
+| --- | --- |
+| Script exits with `error: gemini CLI not found on PATH` | Install the Gemini CLI and ensure `gemini` is on `PATH` (`command -v gemini`); the script hard-fails at the `command -v gemini` check before any run. |
+| Reports come back empty or say "Failed to load API key" / "Both GOOGLE_API_KEY" | `GEMINI_API_KEY` is unset. Add `GEMINI_API_KEY=<key>` to `~/.gemini/.env` (the script auto-loads it via `sed`) or `export GEMINI_API_KEY` before calling; don't hardcode it in the SKILL. |
+| `error: cannot read image path <path>` or `error: specify an image path` | Pass the IMAGE_PATH as the final positional arg (after `--focus`), and use a path readable from cwd — the script `cd`s into the image's dirname to build the absolute `@`-attached path, so relative paths must resolve from where you invoke it. |
+| Gemini ignores the image or critiques nothing (HEIC/unsupported format) | Convert to PNG first: `sips -s format png in.heic --out tmp/in.png`, then point `--focus` + IMAGE_PATH at the PNG. The model only ingests the `@$ABS_IMAGE_PATH` it can decode. |
+| One run's critique contradicts the others / a finding looks hallucinated | This is the expected single-run noise — trust the flash consensus report (only findings in ≥2 of 3 runs survive), and eyeball the named view/joint yourself before acting; never act on a 1/3 outlier. |
+| Synthesis report is truncated or garbled (image too large for the API) | Downscale before sending: `sips -Z 1600 tmp/in.png` (or re-render at a smaller resolution) so the encoded image fits the vision model's request limit, then re-run. |

@@ -89,3 +89,13 @@ empty cell is a visible gap, so every story gets exercised.
 Read `docs/feature-audit.csv`, infer the current phase from the column of statuses
 (any `spec` → phase 2; any `fail` → phase 3; any `verified≠yes` → phase 4), and
 continue from there.
+
+## Errors
+
+| Issue | Fix |
+| --- | --- |
+| `agent-browser` (or substitute browser driver) not installed or its MCP/daemon isn't running, so Phase 2 can't navigate/click/screenshot | Don't downgrade to reading code — that voids the skill. Start the driver (or pick an equivalent that can navigate, fill, click, screenshot, and read console+network); if none exists, name the missing role per the Prerequisites and stop, leaving the rows at `spec`. |
+| App won't start, or `portless` can't bind because the dev port is already taken by another process | Find the real start/serve command (package scripts, README, or ask) and run it; map it through `portless` to a fixed `.localhost` URL so the browser driver hits a stable address — fix the port conflict (kill the stale server or change the port) rather than testing against a moving `localhost:PORT`. |
+| `emulate` not installed, so external integrations (Stripe/GitHub/AWS) can't be stubbed and those stories hit the network or fail | Install/run `emulate` (or another local mock for that provider) and point the app's API base/keys at it so integration paths run offline; if it can't be stood up, mark only the affected rows `fail` with the missing-stub reason in `issues` — never silently skip them. |
+| Missing/required API key or credential for an integration the emulator can't fully fake, blocking a real path | Fetch the key from Bitwarden (`bws`) at run time and inject via env — never hardcode it; if it's unavailable, record the blocked story as `fail` with the missing-credential note in `issues` so it's a visible gap, not a fake `pass`. |
+| `docs/feature-audit.csv` missing, corrupt, or its columns drifted from `id,area,user_story,expected_behavior,source,status,issues,fix,verified` mid-loop | Treat the CSV as the canonical state machine: recreate it with the exact 9-column header if absent, and repair drift to that schema before continuing — never fork a second copy. If status values are inconsistent, re-derive the phase from the Resuming rules and re-render `docs/feature-audit.html` from the repaired CSV so the report stops drifting. |

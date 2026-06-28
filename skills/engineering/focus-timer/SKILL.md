@@ -78,6 +78,17 @@ bun "$FOC" config focus=25 short=5 long=15 interval=4 autostart=true
 The timer is server-owned and shared with the web app (realtime). To pace your own work: `start` a
 block, watch for the phase to flip to a break, checkpoint, then continue.
 
+## Errors
+
+| Issue | Fix |
+| --- | --- |
+| Agent writes (`report`/`ask`/`event`/`recall`/`learn`) rejected (401) or silently no-op — `FOCUS_API_KEY` unset | Mint a key at focus web → Settings → Mint key, then export it: `export FOCUS_API_KEY=$(bws secret list -o json \| jq -r '.[]\|select(.key=="FOCUS_API_KEY")\|.value' \| head -1)`. GUI-launched apps that miss it need the `dev.jasonv.focus-key.plist` LaunchAgent loaded (or relaunch from a terminal that sourced `~/.zshrc`). |
+| `bws` token missing so the key can't load (`bws` errors / empty value) | The bws access token is read transiently from `~/dev/.env.local` — confirm that file exists and holds the token; without it the LaunchAgent and `.zshrc` export both yield nothing, so the key never enters the env. |
+| Timer control/read (`status`/`start`/`stats`/`fleet`) fails or returns nothing | These use `FOCUS_USER_ID` (not the key) against the no-auth prod deployment — set `FOCUS_USER_ID`. Via the remote MCP, also pass the `x-focus-user` header with the id. |
+| `bun "$FOC" …` fails: command not found / cannot find module | Clone the public tooling repo `~/dev/focus-timer-tools` (`github jpvarbed/focus-timer-tools`) and run `bun install` once; `FOC=~/dev/focus-timer-tools/cli/src/index.ts`. |
+| Hosted MCP at `https://mcp.jasonv.dev/api/mcp` not connected | Fall back to the CLI in `~/dev/focus-timer-tools` (same `focus_report`/`focus_ask`/`focus_event`/`focus_fleet` as `report`/`ask`/`event`/`fleet`); pass auth via `Authorization: Bearer ak_…` when the MCP is reachable again. |
+| `decide` logged as a knowledge-gap instead of forming lineage | Provide a real cite: `recall` to find prior knowledge, `learn "Title" body="…"` if it's new, then `decide "…" cites=knowledge:<slug>`. A decision with no cite is recorded but never wired into the provenance graph. |
+
 ## Notes
 
 - Tooling repo (clone if missing): `~/dev/focus-timer-tools` (github `jpvarbed/focus-timer-tools`,

@@ -77,26 +77,26 @@ DNS records for `<sub>.jasonv.dev`: **CNAME `<sub>` → `cname.vercel-dns.com`**
 jasonv.dev/dns/dns-settings`) via the Claude-in-Chrome tools. Editing DNS triggers a Google
 re-verify — the human completes that sign-in; don't drive logins.
 
-## Gotchas (learned building focus-timer)
-
-- **Diagrams:** headless-browser renderers fail in this sandbox (Excalidraw's CDN bundle and
-  `mermaid-cli`'s Puppeteer both time out). Use the **visualize tool** (`show_widget`) for
-  inline diagrams and **save a self-contained `.svg` to `docs/`**. Mermaid-in-markdown only if
-  you specifically want GitHub-native rendering.
-- **Convex codegen** must run before the typed `api` exists; until then the CLI uses
-  `makeFunctionReference("file:export")` and builds fine.
-- **Convex schema migrations:** adding a required field to a table with existing rows fails
-  validation. Make it `v.optional(...)` to avoid a migration, or clear the test rows.
-- **`noUncheckedIndexedAccess`** in tsconfig makes Convex's `anyApi` proxy `| undefined` — use
-  `makeFunctionReference` instead.
-- **Secrets caps:** Bitwarden SM free plan = 3 projects max. Supabase free = 2 projects (why
-  focus-timer went Convex). Vercel team scope is `jpvarbeds-projects`.
-
 ## Secrets
 
 `~/dev/.env.local` (plaintext, gitignored) + Bitwarden Secrets Manager (`bws`). Keys you'll
 need: `CONVEX_PAT`, `VERCEL_FULL_TOKEN`, `LINEAR_API_KEY`, `BITWARDEN_ACCESS_TOKEN`, `gh` keyring
 login. The GitHub fine-grained `GITHUB_PAT_LLC_TOKEN` exists but can't create repos.
+
+## Errors
+
+| Issue | Fix |
+| --- | --- |
+| `npx convex dev --once` fails to auth / no access token | Write `~/.convex/config.json` = `{"accessToken": "<CONVEX_PAT>"}`; fetch `CONVEX_PAT` from `~/dev/.env.local` or `bws`, never hardcode it. |
+| Vercel deploy errors "project not found" / scope-related 403 | Pass `--scope jpvarbeds-projects` and `--token="$VERCEL_FULL_TOKEN"`; deploy the prebuilt `dist` (`cp -R apps/web/dist /tmp/<name>`), not the source. |
+| `vercel domains add` returns 403 when attaching `<sub>.jasonv.dev` | Skip the CLI — `POST https://api.vercel.com/v10/projects/<project>/domains?teamId=<team>` with `Authorization: Bearer $VERCEL_FULL_TOKEN`, then hit the `/verify` endpoint. |
+| `gh repo create` fails / can't create repo with a token | Fine-grained PATs (`GITHUB_PAT_LLC_TOKEN`) can't create repos — use the keyring login: `env -u GH_TOKEN -u GITHUB_TOKEN gh repo create ...`. |
+| Domain stuck "pending verification" after adding it | DNS not propagated — add **CNAME `<sub>` → `cname.vercel-dns.com`** + **TXT `_vercel`** in Squarespace, wait, then re-run the Vercel `/verify` POST. |
+| Convex `api` import is `undefined` / typed client missing | Codegen hasn't run — `cd packages/backend && npx convex dev --once` first; in the CLI use `makeFunctionReference("file:export")` so it builds pre-codegen. |
+| Convex deploy rejects a schema change with validation error | Adding a required field to a table with rows fails — make it `v.optional(...)` or clear the test rows before deploying. |
+| `noUncheckedIndexedAccess` makes Convex `anyApi` proxy `| undefined` | Don't use the `anyApi` proxy — call via `makeFunctionReference("file:export")` instead. |
+| Diagram render hangs (Excalidraw CDN / `mermaid-cli` Puppeteer time out in sandbox) | Don't run headless-browser renderers — use the `show_widget` visualize tool and save a self-contained `.svg` to `docs/`. |
+| Out of project slots provisioning secrets backend | Bitwarden SM free = 3 projects, Supabase free = 2 — that cap is why this stack uses Convex; reuse an existing project or go Convex. |
 
 ## Planned additions
 

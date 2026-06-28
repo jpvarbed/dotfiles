@@ -55,3 +55,13 @@ In response text (not inside the widget): a one-paragraph bottom line + the sing
 
 This is the **env / dotfiles** status board. For per-feature project status, pull from that
 project's repo + its own JAS issues instead. Keep it cheap — it's a standup, not an audit.
+
+## Errors
+
+| Issue | Fix |
+|---|---|
+| `bws secret list` fails with a transient DNS / network error fetching the Linear key | Re-run the `bws secret list -o json \| jq ...` line once or twice; it's a flaky resolve, not a real auth failure. Confirm `BWS_ACCESS_TOKEN` was exported from `~/dev/.env.local` first. |
+| `LINEAR_API_KEY` not found in bws (`KEY` comes back empty) | The Open — Linear JAS column can't load. Skip it and render the board with only Shipped + Blocked, noting the JAS fetch was unavailable — don't fabricate issues. Add the key to Bitwarden Secrets Manager to restore it. |
+| Used `linear issue list --team JAS` and got nothing / an error | Expected — the CLI's `list` only returns *assigned-to-me* and errors without `--sort`. Use the GraphQL `curl` to `api.linear.app/graphql` in step 1 instead; it's the source of truth for the Open column. |
+| `git log --oneline -12` is empty or errors with "not a git repository" | `~/dev/dotfiles` isn't a repo (or you're elsewhere). `cd ~/dev/dotfiles` first; if it's genuinely not initialized, render the Shipped column empty rather than inventing commits. |
+| GraphQL returns `priority: 0` issues sorted to the top as if urgent | `0` = *None/unset*, not Urgent. Order `1→2→3→4` then `0` last, and never color a `0` chip red. |

@@ -72,3 +72,14 @@ Put this checklist at the top of the private repo's `PLAN.md`. "Updated the CLI 
 
 - **artifact-share** (private) + **artifact-studio-tools** (public) — apps at `artifacts.jasonv.dev/<slug>/`, console at `studio.artifacts.jasonv.dev`.
 - **focus-timer** — same trio (CLI/MCP/skill) over one Convex backend, used from any project.
+
+## Errors
+
+| Issue | Fix |
+| --- | --- |
+| Added a backend function + `convex/http.ts` `/v1` route but the CLI/MCP/skill still 404 or miss the new capability | Surface drift — walk the sync rule's six surfaces in order: regenerate `openapi.ts` (+ its test), add the CLI command + `--help`, the MCP tool + description, update both SKILL.md copies and both READMEs in the SAME change. |
+| `openapi.ts` updated but the public `<product>-tools` repo still ships the old CLI/MCP shape (cross-repo skew) | The two repos sync only through the HTTP `/v1` API + OpenAPI doc, not a shared package. Re-pull `<product>-tools`, regenerate clients from the current `openapi.ts`, and run `total-tdd` to confirm CLI/MCP/skill match the live `/v1`. |
+| MCP server returns no tools / "server not connected" in the client | The MCP server in `<product>-tools/mcp/` isn't registered or running — register it in the client config and confirm `<PRODUCT>_API_BASE` points at the deployed Convex `/v1`; the MCP calls `/v1` directly (it does not shell out to the CLI). |
+| Write/publish calls fail with 401/403 while reads succeed | Missing or wrong API key — reads are open per visibility, writes need `ak_…`. Mint a key in the console and load `<PRODUCT>_API_KEY` from bws on demand; never hardcode it or commit it to either repo. |
+| `<product>` CLI not found after a fresh machine / `dotfiles/setup.sh` run | The public tooling clone or the `~/.claude/skills` symlink didn't land — re-run `dotfiles/setup.sh` to clone `<product>-tools` and re-link the global skill in `dotfiles/skills/engineering/`. |
+| Each redeploy mints a new slug/token, breaking existing links | Make publish idempotent for the owner — update in place keyed on `userId`, keeping slug + token stable across redeploys. |

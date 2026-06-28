@@ -72,6 +72,17 @@ bun "$ART" get <slug>      # one app's metadata
 bun "$ART" delete <slug>   # remove one
 ```
 
+## Errors
+
+| Issue | Fix |
+| --- | --- |
+| `share`/`deploy` errors `taken` | The `--slug` is owned by someone else or is a retired slug. Pick a different `--slug`; to update an app you own, re-run with the exact same slug. |
+| `bws` not installed or `BWS_ACCESS_TOKEN` missing so `ARTIFACT_API_KEY` is empty | Run `~/dev/dotfiles/scripts/setup.sh` to pull the bws token, or mint a key in the studio Settings (`studio.artifacts.jasonv.dev`) and `export ARTIFACT_API_KEY=...` manually before re-running. |
+| `ARTIFACT_API_KEY` not in bws / auth rejected (401) | Add an `ARTIFACT_API_KEY` secret in Bitwarden Secrets Manager (or mint one at `studio.artifacts.jasonv.dev`), then re-source step 1. To self-host, also set `ARTIFACT_API_BASE` (also stored in bws). |
+| `bun "$ART"` fails — `~/dev/artifact-studio-tools` missing or not installed | Clone `jpvarbed/artifact-studio-tools` to `~/dev/artifact-studio-tools` and run `bun install` there once; `$ART` points at `cli/src/index.ts`. |
+| MCP tools (`publish_artifact`/`deploy_app`/etc.) absent | Fall back to the `bun "$ART"` CLI in steps 2a/2b, or hit the REST API at `$ARTIFACT_API_BASE/v1` (see `/openapi.json`). Both use the same `ARTIFACT_API_KEY`. |
+| `deploy <dir>` rejected — no `index.html` or blank page in app | The folder must contain `index.html` at its root; use relative (`./app.js`) or CDN-absolute paths. For React, declare deps in an `importmap` from esm.sh (e.g. `https://esm.sh/react@19`) — a bad/missing esm.sh import is the usual cause of a blank render. |
+
 ## Notes
 
 - Apps run full-page on their own origin (`<slug>.jasonv.app`), network allowed, isolated
