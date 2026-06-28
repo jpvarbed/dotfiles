@@ -9,6 +9,23 @@ A resumable, four-phase loop over an entire app. The **canonical CSV is the sing
 source of truth and the state machine** — every run reads it, updates it, and stops
 when the current phase's rows are all terminal. Resume any time by re-reading it.
 
+## Prerequisites
+
+Phase 2 drives the running app through three roles. Before starting it, confirm one
+tool exists for each — if any is missing, say which and stop, rather than silently
+downgrading to reading code (that defeats the skill):
+
+- **Browser driver** (exercise the UI): `agent-browser` preferred, or any
+  browser-automation tool/MCP that can navigate, fill, click, screenshot, and read
+  console + network.
+- **Stable local URL** (serve the app): `portless` preferred, or any fixed
+  host:port / tunnel.
+- **API stub** (offline integration paths): `emulate` preferred, or any local mock
+  for Stripe/GitHub/AWS and similar.
+
+These are this stack's defaults; substitute equivalents when absent. Never mark a row
+tested without actually running the behavior through one tool per role.
+
 ## Canonical tracker
 
 `docs/feature-audit.csv` in the target repo (create `docs/` if missing). One row per
@@ -30,11 +47,12 @@ id,area,user_story,expected_behavior,source,status,issues,fix,verified
    behavior derived from the code, with `source` refs. Status `spec`.
    *Done when every feature has a `spec` row.*
 
-2. **Test.** Exercise each story in the **real running app** — not by reading code.
-   Drive the UI with **agent-browser** (navigate, fill, click, screenshot, check
-   console/network), serve it at a stable URL via **portless**, and stub external
-   APIs (Stripe/GitHub/AWS…) with **emulate** so integration paths run offline.
-   Set `status` `pass` or `fail`; put concrete repro/error in `issues`.
+2. **Test.** Exercise each story in the **real running app**, not by reading code.
+   First get it running: find the start/serve command (package scripts, README, or
+   ask) and expose it at a stable URL via portless (or equivalent). Then drive the UI
+   with the browser driver (navigate, fill, click, screenshot, check console/network)
+   and stub external APIs (Stripe/GitHub/AWS…) with emulate so integration paths run
+   offline. Set `status` `pass` or `fail`; put concrete repro/error in `issues`.
    *Done when no row is still `spec`.*
 
 3. **Fix.** Fix every `fail` — logic bugs and UX errors both count. Record what
