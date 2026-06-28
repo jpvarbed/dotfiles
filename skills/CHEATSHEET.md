@@ -76,6 +76,8 @@ add the always-on process skills on top; this lists the on-demand ones.
 
 ## Meta & utility
 - **writing-great-skills** — author/edit skills well (structure + progressive disclosure).
+- **linting-and-scoring** — score a skill against a binary pass/fail rubric → tier + top fixes.
+- **determinize-refactor** — plan to move a skill's prose into scripts/contracts (script-mode; cut tokens + variance).
 - **cli-for-agents** — design CLIs that agents can drive reliably.
 - **domain-name-brainstormer** — name ideas + TLD availability.
 - **caveman** — ultra-terse output mode (own skill; upstream dropped it).
