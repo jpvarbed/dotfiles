@@ -248,4 +248,17 @@ else warn "can't fetch GEMINI_API_KEY (need bws token + jq)"; fi
 if [ -f "$HOME/.zshrc" ] && grep -qF 'alias gy=' "$HOME/.zshrc"; then skip "gy alias present"
 else printf "\n# gemini YOLO (auto-approve + skip trust) — adversarial-review etc\nalias gy='gemini --yolo --skip-trust'\n" >> "$HOME/.zshrc"; ok "added gy alias"; fi
 
+# 8. Scheduled-task bodies ---------------------------------------------------
+# Track task SKILL.md bodies in the repo; symlink them into ~/.claude. NOTE: this
+# restores the *body* only — the cron registration is separate (re-create via the
+# scheduled-tasks tool in Claude Code on a new machine).
+if [ -d "$DOTFILES/scheduled-tasks" ]; then
+  for d in "$DOTFILES/scheduled-tasks"/*/; do
+    [ -f "${d}SKILL.md" ] || continue
+    name=$(basename "$d"); live="$CLAUDE_DIR/scheduled-tasks/$name"
+    mkdir -p "$live"
+    ln -sfn "${d}SKILL.md" "$live/SKILL.md"; ok "linked scheduled-task $name"
+  done
+fi
+
 say "Done. Open a new shell to pick up env changes."
