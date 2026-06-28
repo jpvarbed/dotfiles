@@ -1,6 +1,6 @@
 ---
 name: jason-prototype-stack
-description: Stand up a new <thing>.jasonv.dev web app fast, the way focus.jasonv.dev was built — bun monorepo + Vite/React SPA + Convex backend + Vercel static deploy + Squarespace DNS, with CLI and Claude-skill clients reusing the same backend. Use when starting a new small web app or prototype on jasonv.dev, or scaffolding a Convex + Vite project.
+description: Stand up a new <thing>.jasonv.dev web app fast, the way focus.jasonv.dev was built — bun monorepo + Vite/React SPA + Convex backend + Vercel static deploy + Squarespace DNS, with CLI and Claude-skill clients reusing the same backend. Use when "starting a new small web app", "prototype on jasonv.dev", or "scaffolding a Convex + Vite project". Not for publishing a one-off artifact you already built — use `share-artifact`; not for a build-step-free esm.sh React app — use `build-artifact-app`; not for the multi-client backend split itself — see `mcp-dev`.
 ---
 
 # Jason Prototype Stack
@@ -42,8 +42,8 @@ Copy the defaults; deviate only with a reason worth writing in an ADR.
    client, and typechecks — one shot.
 2. **CLI:** thin `ConvexHttpClient` wrapper.
 3. **Skill:** a `SKILL.md` that drives the CLI.
-4. **Web:** Vite SPA; design pass; verify with the `Claude_Preview` tools
-   (`preview_start` → `preview_screenshot`), iterate on real screenshots.
+4. **Web:** Vite SPA; design pass; verify with the Claude Preview tools
+   (`mcp__Claude_Preview__preview_start` → `mcp__Claude_Preview__preview_screenshot`), iterate on real screenshots.
 5. **Deploy** (below).
 
 ## Provisioning — the commands that actually worked

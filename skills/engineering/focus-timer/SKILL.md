@@ -1,6 +1,6 @@
 ---
 name: focus-timer
-description: Report into Jason's cross-project agent fleet and/or drive the server-owned Pomodoro timer (focus.jasonv.dev). Use when you (an agent) should tell Jason what you're working on, flag that you need him, or log a decision — and when the user wants to start/check/pace a focus session. Works from ANY project; the CLI/MCP and identity are global.
+description: Report into Jason's cross-project agent fleet and/or drive the server-owned Pomodoro timer (focus.jasonv.dev). Use when an agent should report into the fleet, flag it needs Jason, or log a decision — and when the user wants to start/check/pace a focus session: "report in", "start a focus session", "what's the fleet doing?", "log a decision". Works from ANY project; the CLI/MCP and identity are global. Not for env/dotfiles status — use `env-status-board`.
 ---
 
 # Focus — timer + attention orchestrator

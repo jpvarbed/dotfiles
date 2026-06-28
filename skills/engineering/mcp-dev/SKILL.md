@@ -1,6 +1,6 @@
 ---
 name: mcp-dev
-description: Use when building or extending an agent-driven product where agents act/publish through a Claude skill + CLI + MCP over one backend API — deciding how to split the repos, or adding a backend capability that must reach the clients without drifting. Covers the private-service-repo + public-tooling-repo pattern (artifact-share/artifact-studio-tools, focus-timer). Use whenever you touch one surface (backend, OpenAPI, CLI, MCP, skill, docs) and the others must stay in sync.
+description: Use when building or extending an agent-driven product where agents act/publish through a Claude skill + CLI + MCP over one backend API. Covers the private-service-repo + public-tooling-repo pattern (artifact-share/artifact-studio-tools, focus-timer), kept in sync. Triggers include "add a backend capability", "keep the CLI and MCP in sync", "split the repos", and "the MCP is out of sync with the API". Use whenever you touch one surface (backend, OpenAPI, CLI, MCP, skill, docs) and the others must stay in sync. Not for scaffolding a new app — use `jason-prototype-stack`; not for one-off publishing of something you already built — use `share-artifact`.
 ---
 
 # mcp-dev — private service + public agent-tooling pattern
