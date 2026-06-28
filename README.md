@@ -86,3 +86,8 @@ collections I pull from and their sources. My own skills live in `skills/`.
 
 [`docs/tools.md`](./docs/tools.md) — running log of interesting dev tools (using /
 evaluating / watching), cross-referenced to Linear JAS issues.
+
+## Papers
+
+[`docs/papers.md`](./docs/papers.md) — research for skill / agent construction
+(harnesses, reliability, eval, instruction-following).
