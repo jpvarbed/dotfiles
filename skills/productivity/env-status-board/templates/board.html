@@ -1,0 +1,36 @@
+<h2 class="sr-only">Status board: shipped recently, open Linear JAS issues, and items blocked on the user.</h2>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; padding:1rem 0;">
+
+  <div style="background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1rem 1.1rem;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+      <i class="ti ti-check" style="font-size:18px; color:var(--color-text-success);" aria-hidden="true"></i>
+      <span style="font-weight:500; font-size:15px;">Shipped recently</span>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+      <div style="background:#E1F5EE; color:#085041; padding:8px 10px; border-radius:var(--border-radius-md);">CHIP — clone one div per shipped item</div>
+    </div>
+  </div>
+
+  <div style="background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1rem 1.1rem;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+      <i class="ti ti-progress" style="font-size:18px; color:var(--color-text-info);" aria-hidden="true"></i>
+      <span style="font-weight:500; font-size:15px;">Open — Linear JAS</span>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+      <div style="background:#E6F1FB; color:#0C447C; padding:8px 10px; border-radius:var(--border-radius-md);"><b style="font-weight:500;">JAS-NN</b> · issue title</div>
+      <div style="background:var(--color-background-secondary); color:var(--color-text-secondary); padding:8px 10px; border-radius:var(--border-radius-md);">+ N more eval issues</div>
+    </div>
+  </div>
+
+  <div style="background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); padding:1rem 1.1rem;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+      <i class="ti ti-alert-triangle" style="font-size:18px; color:var(--color-text-danger);" aria-hidden="true"></i>
+      <span style="font-weight:500; font-size:15px;">Blocked on you</span>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+      <div style="background:#FCEBEB; color:#791F1F; padding:8px 10px; border-radius:var(--border-radius-md);">security / exposure item</div>
+      <div style="background:#FAEEDA; color:#633806; padding:8px 10px; border-radius:var(--border-radius-md);">manual / run-once step</div>
+    </div>
+  </div>
+
+</div>

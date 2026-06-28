@@ -87,6 +87,7 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **determinize-refactor** — plan to move a skill's prose into scripts/contracts (script-mode; cut tokens + variance).
 - **cli-for-agents** — design CLIs that agents can drive reliably.
 - **domain-name-brainstormer** — name ideas + TLD availability.
+- **env-status-board** — "where are we": 3-column status board (shipped / open Linear JAS / blocked-on-you) of the dotfiles+skills+env work, rendered with the viz tool.
 - **caveman** — ultra-terse output mode (own skill; upstream dropped it).
 - **resolving-merge-conflicts** — resolve an in-progress git merge/rebase conflict.
 - **obsidian-vault** — Obsidian notes. **git-guardrails-claude-code** / **setup-pre-commit** — repo setup.
