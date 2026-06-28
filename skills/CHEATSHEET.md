@@ -60,8 +60,8 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **writing-shape** — shape a pile of notes into an article.
 - **writing-beats** — assemble an article as a journey of beats.
 - **edit-article** — revise/tighten an existing draft.
-- **avoid-ai-writing** — audit/rewrite AI-writing tells: detector + 0–100 score, rewrite/detect/edit modes, voice profiles. The de-AI-ify workhorse.
-- **unslop** — lighter "cut AI tells" (superseded by avoid-ai-writing; candidate to cull).
+- **avoid-ai-writing** — audit/rewrite AI-writing tells: detector + 0–100 score, rewrite/detect/edit modes, voice profiles.
+- **unslop** — cut AI tells from any writing. (Overlaps avoid-ai-writing — not yet compared; pick one after a bake-off.)
 
 ## Data & analysis  (knowledge-work)
 - **analyze** — answer a data question, from a quick lookup to a full report (golf/finance data).
