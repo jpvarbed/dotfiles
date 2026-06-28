@@ -63,6 +63,7 @@ marketplace. Re-run it to pull a new machine into sync.
   **meta** (skill / agent tooling)
   - `meta/linting-and-scoring` — score a skill against the 40-check binary rubric → tier.
   - `meta/determinize-refactor` — plan moving a skill's prose into scripts/contracts (script-mode).
+  - `meta/goal-spec` — compile a rough task into a launch-ready `/goal` brief (verifiability gate + context-access + verification-plan + binary rubric).
 
   **review** (critique & red-team)
   - `review/adversarial-review` — Gemini-CLI red-team of a plan/spec/diff.
