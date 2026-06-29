@@ -179,16 +179,20 @@ if [ -n "${BWS_ACCESS_TOKEN:-}" ]; then
 
 # dotfiles: load BWS token on demand — run `bws-load` when you need bws
 bws-load() { export BWS_ACCESS_TOKEN="$(sed -nE 's/^(export )?(BWS_ACCESS_TOKEN|BITWARDEN_ACCESS_TOKEN)="?([^"]*)"?$/\3/p' "$HOME/dev/.env.local" 2>/dev/null | head -1)"; echo "BWS token loaded into this shell."; }
+# bws-get KEY — robust single-secret fetch. Uses python (not jq) because bws -o json
+# emits multiline values (e.g. age keys) with raw newlines that break jq for any key after them.
+bws-get() { bws secret list -o json 2>/dev/null | python3 -c "import sys,json;print(next((s['value'] for s in json.loads(sys.stdin.read() or '[]',strict=False) if s['key']==sys.argv[1]),''),end='')" "$1"; }
 ZRCBLOCK
     ok "zshrc now defines bws-load (on-demand, not auto-exported)"
   fi
   if bws secret list >/dev/null 2>&1; then ok "bws auth verified"; else warn "bws auth failed — token invalid/expired"; fi
   # pull the age identity key from bws (decrypts the doc files)
   if [ -f "$AGE_KEY" ]; then skip "age key present"
-  elif command -v jq >/dev/null; then
+  elif command -v python3 >/dev/null; then
     mkdir -p "$(dirname "$AGE_KEY")"
-    k="$(bws secret list -o json 2>/dev/null | jq -r '.[]|select(.key=="DOTFILES_AGE_KEY")|.value' | head -1)"
-    if [ -n "$k" ] && [ "$k" != "null" ]; then printf '%s\n' "$k" > "$AGE_KEY"; chmod 600 "$AGE_KEY"; ok "age key pulled from bws"
+    # python, not jq: the age key value is multiline and bws emits raw newlines that break jq
+    k="$(bws secret list -o json 2>/dev/null | python3 -c "import sys,json;print(next((s['value'] for s in json.loads(sys.stdin.read() or '[]',strict=False) if s['key']=='DOTFILES_AGE_KEY'),''),end='')")"
+    if [ -n "$k" ]; then printf '%s\n' "$k" > "$AGE_KEY"; chmod 600 "$AGE_KEY"; ok "age key pulled from bws"
     else warn "DOTFILES_AGE_KEY not in bws — run scripts/age-init.sh and store it"; fi
   fi
 else

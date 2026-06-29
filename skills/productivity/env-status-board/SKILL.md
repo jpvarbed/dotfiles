@@ -19,7 +19,7 @@ Condense to ≤6 chips — present-tense outcomes, ≤8 words each (e.g. "Bake-o
 **Open — Linear JAS.** Fetch via the Linear API — reliable, unlike the `linear` CLI's `list` (which only shows *assigned-to-me* and errors without a sort):
 ```bash
 eval "$(grep BWS_ACCESS_TOKEN ~/dev/.env.local)"; export BWS_ACCESS_TOKEN
-KEY=$(bws secret list -o json | jq -r '.[]|select(.key=="LINEAR_API_KEY").value' | head -1)
+KEY=$(bws secret list -o json | python3 -c 'import sys,json;print(next((s["value"] for s in json.loads(sys.stdin.read(),strict=False) if s["key"]=="LINEAR_API_KEY"),""))')  # python, not jq: bws emits multiline values (age keys) that break jq
 curl -s https://api.linear.app/graphql -H "Authorization: $KEY" -H "Content-Type: application/json" \
   -d '{"query":"{ issues(filter:{team:{key:{eq:\"JAS\"}}, state:{type:{nin:[\"completed\",\"canceled\"]}}}, first:30){ nodes { identifier title priority state{name} } } }"}' \
   | jq -r '.data.issues.nodes[]? | "\(.identifier) [P\(.priority)] — \(.title)"'
@@ -60,7 +60,7 @@ project's repo + its own JAS issues instead. Keep it cheap — it's a standup, n
 
 | Issue | Fix |
 |---|---|
-| `bws secret list` fails with a transient DNS / network error fetching the Linear key | Re-run the `bws secret list -o json \| jq ...` line once or twice; it's a flaky resolve, not a real auth failure. Confirm `BWS_ACCESS_TOKEN` was exported from `~/dev/.env.local` first. |
+| `bws secret list` fails with a transient DNS / network error fetching the Linear key | Re-run the bws load line once or twice; it's a flaky resolve, not a real auth failure. Confirm `BWS_ACCESS_TOKEN` was exported from `~/dev/.env.local` first. |
 | `LINEAR_API_KEY` not found in bws (`KEY` comes back empty) | The Open — Linear JAS column can't load. Skip it and render the board with only Shipped + Blocked, noting the JAS fetch was unavailable — don't fabricate issues. Add the key to Bitwarden Secrets Manager to restore it. |
 | Used `linear issue list --team JAS` and got nothing / an error | Expected — the CLI's `list` only returns *assigned-to-me* and errors without `--sort`. Use the GraphQL `curl` to `api.linear.app/graphql` in step 1 instead; it's the source of truth for the Open column. |
 | `git log --oneline -12` is empty or errors with "not a git repository" | `~/dev/dotfiles` isn't a repo (or you're elsewhere). `cd ~/dev/dotfiles` first; if it's genuinely not initialized, render the Shipped column empty rather than inventing commits. |

@@ -39,7 +39,7 @@ the environment on demand — never write it to a file or paste it into a comman
 
 ```bash
 eval "$(grep BWS_ACCESS_TOKEN ~/dev/.env.local)"; export BWS_ACCESS_TOKEN
-export OPENROUTER_API_KEY="$(bws secret list -o json | jq -r '.[]|select(.key=="OPENROUTER_API_KEY").value' | head -1)"
+export OPENROUTER_API_KEY="$(bws secret list -o json | python3 -c 'import sys,json;print(next((s["value"] for s in json.loads(sys.stdin.read(),strict=False) if s["key"]=="OPENROUTER_API_KEY"),""))')"
 [ -n "$OPENROUTER_API_KEY" ] || echo "OPENROUTER_API_KEY missing from bws — create it (see Errors table)"
 ```
 
@@ -72,7 +72,7 @@ bws secret create OPENROUTER_API_KEY "sk-or-v1-..." "$PROJECT_ID"
 
 ```bash
 eval "$(grep BWS_ACCESS_TOKEN ~/dev/.env.local)"; export BWS_ACCESS_TOKEN
-export OPENROUTER_API_KEY="$(bws secret list -o json | jq -r '.[]|select(.key=="OPENROUTER_API_KEY").value' | head -1)"
+export OPENROUTER_API_KEY="$(bws secret list -o json | python3 -c 'import sys,json;print(next((s["value"] for s in json.loads(sys.stdin.read(),strict=False) if s["key"]=="OPENROUTER_API_KEY"),""))')"
 curl -s https://openrouter.ai/api/v1/models \
   -H "Authorization: Bearer $OPENROUTER_API_KEY" \
   | jq -r '.data[] | "\(.id)\t\(.pricing.prompt)/\(.pricing.completion)"' | head -40
@@ -82,7 +82,7 @@ curl -s https://openrouter.ai/api/v1/models \
 
 ```bash
 eval "$(grep BWS_ACCESS_TOKEN ~/dev/.env.local)"; export BWS_ACCESS_TOKEN
-export OPENROUTER_API_KEY="$(bws secret list -o json | jq -r '.[]|select(.key=="OPENROUTER_API_KEY").value' | head -1)"
+export OPENROUTER_API_KEY="$(bws secret list -o json | python3 -c 'import sys,json;print(next((s["value"] for s in json.loads(sys.stdin.read(),strict=False) if s["key"]=="OPENROUTER_API_KEY"),""))')"
 curl -s https://openrouter.ai/api/v1/chat/completions \
   -H "Authorization: Bearer $OPENROUTER_API_KEY" \
   -H "Content-Type: application/json" \
