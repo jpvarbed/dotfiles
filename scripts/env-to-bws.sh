@@ -65,7 +65,8 @@ if [ -z "$PROJECT" ]; then
 fi
 echo "Target bws project: $PROJECT"
 
-existing="$(bws secret list "$PROJECT" -o json | jq -r '.[].key')"
+# python, not jq: bws -o json emits multiline values (age keys) that break jq → truncated dedup list
+existing="$(bws secret list "$PROJECT" -o json | python3 -c 'import sys,json;[print(s["key"]) for s in json.loads(sys.stdin.read() or "[]",strict=False)]')"
 created=0; skipped=0; empty=0
 i=0; while [ "$i" -lt "${#KEYS[@]}" ]; do
   k="${KEYS[$i]}"; v="${VALS[$i]}"; i=$((i+1))
