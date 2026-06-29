@@ -1,6 +1,6 @@
 ---
 name: review-council
-description: Convene a multi-model, multi-persona review council to grade a Claude-authored plan, spec, tasks list, design, PRD, or diff before it's acted on. Runs ≥3 distinct personas (Architect / Pragmatist / Verifier) across TWO independent outside engines — Codex (`codex exec`, yolo) and Gemini — then synthesizes a consensus PASS/CONCERNS/FAIL verdict + a deduped must-fix list. Use when the user says "review council", "have codex + gemini grade this", "council-review the plan", or before dispatching a plan to /goal or implementing a /spec. Heavier than adversarial-review (which is a single Gemini pass) — reach for the council when the work matters.
+description: Convene a multi-model, multi-persona review council to grade a Claude-authored plan, spec, tasks list, design, PRD, or diff before it's acted on. Runs ≥3 distinct personas (Architect / Pragmatist / Verifier) across a deterministic harness-as-judge pre-pass (objective checks + optional repo typecheck/build/test/lint) plus TWO independent outside engines — Codex (`codex exec`, read-only) and Gemini — then synthesizes a consensus PASS/CONCERNS/FAIL verdict + a deduped must-fix list. Use when the user says "review council", "have codex + gemini grade this", "council-review the plan", or before dispatching a plan to /goal or implementing a /spec. Heavier than adversarial-review (which is a single Gemini pass) — reach for the council when the work matters.
 ---
 
 # review-council — grade a plan with a multi-model council
@@ -16,8 +16,12 @@ artifact : a file to review — plan.md / a /spec's tasks.md|design.md|requireme
            a PRD / a unified diff. (Inline/conversation plan? Write it to a temp file first.)
 context  : one line on what the artifact is FOR (its goal) — put it at the top of the file.
 focus?   : optional — the area to attack hardest (passed via --focus).
+gates?   : optional — `--gates <repo-dir>` also runs that repo's typecheck/build/test/lint as hard gates.
 ```
-Run: `skills/review/review-council/council.sh [--focus "<area>"] <artifact-file>`
+Run: `skills/review/review-council/council.sh [--focus "<area>"] [--gates <repo-dir>] <artifact-file>`
+
+## Step 0 — Harness (deterministic, runs first)
+Before any model, `council.sh` runs `harness-check.sh` for the **objective facts no LLM is needed for**: unresolved markers (TODO/FIXME/???/`<PLACEHOLDER>`), acceptance-criteria & EARS counts, task checkboxes, vague terms, and spec sections (sibling-aware — `requirements.md`/`design.md`/`tasks.md`). With `--gates <repo-dir>` it also runs that repo's **typecheck / build / test / lint**. It emits `HARNESS VERDICT: PASS|FAIL` + blockers. Those facts are injected into every persona's prompt (grade against ground truth, don't re-derive), and the verdict is a **hard gate** (below). A fact beats an opinion — this is what makes it harness-as-judge, not just LLM-as-judge.
 
 ## The council (≥3 personas across 2 engines)
 Both engines are used so a finding's strength reflects model diversity, not just one model's quirks.
@@ -56,6 +60,7 @@ PER-PERSONA: Architect <verdict> · Pragmatist <verdict> · Verifier <verdict>  
 ```
 
 **Verdict rule (deterministic — show it on the DERIVED FROM line):**
+- **FAIL (hard gate)** if `HARNESS VERDICT: FAIL` — the harness blockers are mandatory MUST-FIX and **no persona opinion can lift it** → GATE: stop. (A fact beats a vote.)
 - **FAIL** if any persona returns FAIL on a High-severity issue → GATE: stop.
 - **CONCERNS** if any High/Medium findings remain (no blocking FAIL) → GATE: revise-then-proceed.
 - **PASS** if all personas PASS or only Low findings remain → GATE: proceed.

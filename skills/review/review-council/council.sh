@@ -15,16 +15,18 @@ set -uo pipefail
 
 usage() {
   cat <<'U'
-council.sh [--focus "<what to attack hardest>"] <artifact-file>
-  Multi-model (Codex + Gemini), multi-persona review council. Read-only; prints
-  each persona's verdict+findings for Claude to synthesize (see SKILL.md).
+council.sh [--focus "<what to attack hardest>"] [--gates <repo-dir>] <artifact-file>
+  Harness-as-judge (deterministic checks) + multi-model (Codex + Gemini) multi-persona
+  council. Read-only. --gates DIR also runs that repo's typecheck/build/test/lint.
+  Prints the harness facts + each persona's verdict for Claude to synthesize (SKILL.md).
 U
 }
 
-FOCUS=""; FILE=""
+FOCUS=""; FILE=""; GATES=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --focus) [ $# -ge 2 ] || { echo "error: --focus needs a value" >&2; exit 2; }; FOCUS="$2"; shift 2;;
+    --gates) [ $# -ge 2 ] || { echo "error: --gates needs a repo dir" >&2; exit 2; }; GATES="$2"; shift 2;;
     -h|--help) usage; exit 0;;
     -*) echo "error: unknown flag: $1" >&2; usage >&2; exit 2;;
     *) [ -z "$FILE" ] || { echo "error: only one artifact file (extra arg: $1)" >&2; exit 2; }; FILE="$1"; shift;;
@@ -40,6 +42,12 @@ LINES=$(wc -l < "$FILE" | tr -d ' ')
 ART="$(cat "$FILE")"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 GEMINI_REVIEW="$HERE/../adversarial-review/gemini-review.sh"
+
+# Harness-as-judge: deterministic pre-pass FIRST. Its facts are ground truth the
+# LLM personas must grade against; a HARNESS FAIL is a hard blocker on the verdict.
+HARNESS="$(bash "$HERE/harness-check.sh" "$FILE" ${GATES:+--gates "$GATES"} 2>&1)"
+printf '%s\n' "$HARNESS"
+HVERDICT="$(printf '%s\n' "$HARNESS" | sed -nE 's/^HARNESS VERDICT: //p' | head -1)"
 
 # Optional per-engine timeout so one hung model can't hang the whole council.
 TIMEOUT=""
@@ -78,7 +86,10 @@ for p in "${PERSONAS[@]}"; do
   IFS='|' read -r name engine model lens <<< "$p"
   echo
   echo "===== PERSONA: $name  ($engine : $model) ====="
-  base="You are the \"$name\" reviewer on a review council grading a colleague's work. LENS: $lens"
+  base="You are the \"$name\" reviewer on a review council grading a colleague's work. LENS: $lens
+
+HARNESS FACTS (deterministic, already verified — grade AGAINST these, don't re-derive; a HARNESS FAIL is a hard blocker the council can't override):
+$HARNESS"
   [ -n "$FOCUS" ] && base="$base
 EXTRA FOCUS: $FOCUS"
   case "$engine" in
@@ -110,5 +121,5 @@ $RUBRIC" "$FILE" 2>&1)"; rc=$?
 done
 
 echo
-echo "===== END COUNCIL: $ran/${#PERSONAS[@]} personas produced a verdict — Claude synthesizes per SKILL.md ====="
+echo "===== END COUNCIL: HARNESS=${HVERDICT:-?} · $ran/${#PERSONAS[@]} personas produced a verdict — Claude synthesizes per SKILL.md ====="
 [ "$ran" -gt 0 ] || { echo "error: no persona produced a verdict (engines unavailable?)" >&2; exit 1; }
