@@ -70,6 +70,12 @@ them into one sentence that earns the point. https://en.wikipedia.org/wiki/Parat
 - Bad: "The fat was always the point. The salad was just keeping it company."
 - Better: "The salad was there to make the fat feel acceptable."
 
+**"It's not just X, it's Y"** — fake elevation: demote the literal thing to crown a grander
+one, manufacturing depth. Just say what it is. (avoid-ai-writing flags the dash form,
+"It's not X, it's Y", too.)
+- Bad: "It's not just a planner, it's a way to never miss a talk."
+- Fix: "A planner that resolves the time conflicts for you."
+
 ## Process
 
 1. Draft in my own words.
