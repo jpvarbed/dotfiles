@@ -26,7 +26,8 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **openrouter** — call any LLM (gpt/gemini/llama/deepseek…) via OpenRouter's one-key OpenAI-compatible gateway; cheap/free model routing + non-Claude second opinions. Key from bws. (gemini-CLI *critiques* → `adversarial-review` instead.)
 
 ## Review & verify
-- **adversarial-review** — outside model (Gemini) red-teams a plan/spec/diff. Default for anything that matters.
+- **adversarial-review** — outside model (Gemini) red-teams a plan/spec/diff. Quick single-model check.
+- **review-council** — multi-model (Codex `exec` + Gemini) × ≥3 personas (Architect/Pragmatist/Verifier) grade a plan/spec/tasks → consensus PASS/CONCERNS/FAIL + deduped must-fix. The heavy upgrade of adversarial-review; use before `/goal` dispatch or implementing a `/spec`.
 - **review** — review changes since a point (standards + correctness).
 - **thermos** — run both thermo-nuclear reviews in parallel, then synthesize.
 - **thermo-nuclear-code-quality-review** — extremely strict maintainability/abstraction review.

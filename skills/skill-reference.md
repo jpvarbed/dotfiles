@@ -49,7 +49,7 @@ marketplace. Re-run it to pull a new machine into sync.
 - **Convex** skills: clone the repo, then point your agent's skills dir at its
   `skills/` (or copy the ones you want). Auth needs `CONVEX_PAT` (in Bitwarden SM
   project `pnw-golf-ai`; backup in `~/dev/.env.local`).
-- **My own skills** (this folder, 18): each is `skills/<category>/<name>/SKILL.md`,
+- **My own skills** (this folder, 19): each is `skills/<category>/<name>/SKILL.md`,
   symlinked into `~/.claude/skills` by setup.sh (the linker globs `**/SKILL.md` and
   names by basename — category folders are for humans, not the linker).
 
@@ -69,7 +69,8 @@ marketplace. Re-run it to pull a new machine into sync.
   - `meta/instruction-conflicts` — audit the layered instruction stack for contradictions + make precedence explicit (from ManyIH).
 
   **review** (critique & red-team)
-  - `review/adversarial-review` — Gemini-CLI red-team of a plan/spec/diff.
+  - `review/adversarial-review` — Gemini-CLI red-team of a plan/spec/diff (single model).
+  - `review/review-council` — multi-model (Codex + Gemini) × ≥3 personas grade a plan/spec/tasks → consensus PASS/CONCERNS/FAIL (`council.sh`).
   - `review/visual-critique` — structured critique of a rendered image/figure.
 
   **knowledge**

@@ -130,6 +130,25 @@ if command -v skills >/dev/null || command -v npx >/dev/null; then
   done
 else warn "no skills CLI or npx — skip skills.sh skills"; fi
 
+# 3c. Arize observability — ax CLI + the 12 arize-* skills --------------------
+# LLM/agent tracing so we can SEE what agents do (detect→investigate→fix loop).
+# Free year of Pro redeemed via code ARIZEAIE2026; profile + API key live in
+# ~/.arize/profiles/default.toml (NOT in this repo). Space: "jpvarbed Space".
+# The skills use a PromptScript format that fails `-g` global install, but the
+# universal install still symlinks them into ~/.claude/skills — that's expected.
+if command -v uv >/dev/null; then
+  command -v ax >/dev/null && skip "ax CLI present ($(ax --version 2>/dev/null))" \
+    || { uv tool install arize-ax-cli >/dev/null 2>&1 && ok "ax CLI installed" || warn "ax: uv tool install arize-ax-cli"; }
+else warn "uv not found — ax CLI needs it (curl -LsSf https://astral.sh/uv/install.sh | sh)"; fi
+if command -v skills >/dev/null || command -v npx >/dev/null; then
+  if [ -e "$SKILLS_DIR/arize-trace" ]; then skip "arize skills present"
+  else
+    if command -v skills >/dev/null; then skills add Arize-ai/arize-skills --skill "*" -g -y >/dev/null 2>&1 || true
+    else npx --yes skills@latest add Arize-ai/arize-skills --skill "*" -g -y >/dev/null 2>&1 || true; fi
+    [ -e "$SKILLS_DIR/arize-trace" ] && ok "arize skills installed" || warn "arize skills: npx skills add Arize-ai/arize-skills --skill '*' -g -y"
+  fi
+fi
+
 # verification CLIs the skills above drive (emulate runs via npx, no global needed)
 if command -v npm >/dev/null; then
   for c in agent-browser portless; do
@@ -156,6 +175,65 @@ if command -v claude >/dev/null; then
   else claude plugin marketplace add StarTrail-org/PixelRAG >/dev/null 2>&1 || true
     claude plugin install pixelbrowse@pixelrag-plugins >/dev/null 2>&1 && ok "pixelbrowse installed" \
       || warn "pixelbrowse: /plugin install pixelbrowse@pixelrag-plugins"; fi
+  # Arize Claude-Code tracing — OpenInference spans of EVERY session → Arize AX (project
+  # "claude-code", space "jpvarbed Space"). The API key is injected from bws by the `claude`
+  # shell wrapper below — NOT written to settings.json. Only non-secret config is merged in.
+  if claude plugin list 2>/dev/null | grep -q "claude-code-tracing@coding-harness-tracing"; then skip "arize cc-tracing installed"
+  else claude plugin marketplace add Arize-ai/coding-harness-tracing >/dev/null 2>&1 || true
+    claude plugin install claude-code-tracing@coding-harness-tracing >/dev/null 2>&1 && ok "arize cc-tracing installed" \
+      || warn "arize cc-tracing: /plugin install claude-code-tracing@coding-harness-tracing"; fi
+  # merge non-secret tracing config into ~/.claude/settings.json env (idempotent; never the API key)
+  python3 - "$CLAUDE_DIR/settings.json" <<'PYEOF' && ok "arize tracing env merged" || warn "arize settings.json env merge failed"
+import json,sys,os
+p=sys.argv[1]
+try: d=json.load(open(p))
+except Exception: d={}
+d.setdefault("env",{}).update({
+  "ARIZE_PROJECT_NAME":"claude-code","ARIZE_SPACE_ID":"U3BhY2U6NDM1OTg6U3ZpOA==",
+  "ARIZE_TRACE_ENABLED":"true","ARIZE_LOG_PROMPTS":"true",
+  "ARIZE_LOG_TOOL_DETAILS":"true","ARIZE_LOG_TOOL_CONTENT":"true"})
+os.makedirs(os.path.dirname(p),exist_ok=True)
+json.dump(d,open(p,"w"),indent=2); open(p,"a").write("\n")
+PYEOF
+  # Fleet tracing (gemini, opencode, codex, cursor) — pre-seed ~/.arize/harness/config.yaml so the
+  # interactive `install.sh <harness>` runs prompt-light. Terminal CLIs (gemini, opencode) OMIT
+  # api_key (injected from bws by the shell wrappers below, off-disk); app/GUI (codex, cursor) carry
+  # the key here (chmod 600) since their hooks don't run in a wrapped shell. Regenerated each run.
+  AHCFG="$HOME/.arize/harness/config.yaml"
+  _AK="$(BWS_ACCESS_TOKEN="$(sed -nE 's/^(export )?(BWS_ACCESS_TOKEN|BITWARDEN_ACCESS_TOKEN)="?([^"]*)"?$/\3/p' "$DEV/.env.local" 2>/dev/null | head -1)" bws secret list -o json 2>/dev/null | python3 -c "import sys,json;print(next((s['value'] for s in json.loads(sys.stdin.read() or '[]',strict=False) if s['key']=='ARIZE_API_KEY'),''),end='')" 2>/dev/null)"
+  if [ -n "$_AK" ]; then
+    mkdir -p "$(dirname "$AHCFG")"
+    SP="U3BhY2U6NDM1OTg6U3ZpOA=="; EP="otlp.arize.com:443"
+    { printf 'logging:\n  prompts: true\n  tool_details: true\n  tool_content: true\nharnesses:\n'
+      for h in gemini opencode; do printf '  %s:\n    target: arize\n    endpoint: %s\n    space_id: %s\n    project_name: %s\n' "$h" "$EP" "$SP" "$h"; done
+      # codex/cursor (app/GUI) + claude-code carry the key: hooks may run outside a wrapped shell
+      # (app-launched, cron, pre-existing terminals), so env injection alone silently drops spans.
+      for h in codex cursor claude-code; do printf '  %s:\n    target: arize\n    endpoint: %s\n    space_id: %s\n    project_name: %s\n    api_key: "%s"\n' "$h" "$EP" "$SP" "$h" "$_AK"; done
+    } > "$AHCFG"; chmod 600 "$AHCFG"; unset _AK; ok "arize harness config.yaml seeded (600)"
+  else warn "no bws ARIZE_API_KEY — skipped config.yaml seed"; fi
+  # shell wrappers: fetch ARIZE_API_KEY from bws on launch (cached per shell) so the secret stays out
+  # of settings.json/config.yaml for the terminal CLIs. Guard on the cache var (idempotent).
+  ZRC="$HOME/.zshrc"
+  if [ -f "$ZRC" ] && grep -qF '_ARIZE_API_KEY_CACHE' "$ZRC"; then skip "zshrc has arize wrappers"
+  else cat >> "$ZRC" <<'ZWRAP'
+
+# arize: inject ARIZE_API_KEY from bws only when launching a traced terminal CLI (cached per shell)
+_arize_key() {
+  if [ -z "$_ARIZE_API_KEY_CACHE" ] && command -v bws >/dev/null 2>&1; then
+    _ARIZE_API_KEY_CACHE="$(BWS_ACCESS_TOKEN="$(sed -nE 's/^(export )?(BWS_ACCESS_TOKEN|BITWARDEN_ACCESS_TOKEN)="?([^"]*)"?$/\3/p' "$HOME/dev/.env.local" 2>/dev/null | head -1)" bws secret list -o json 2>/dev/null | python3 -c "import sys,json;print(next((s['value'] for s in json.loads(sys.stdin.read() or '[]',strict=False) if s['key']=='ARIZE_API_KEY'),''),end='')" 2>/dev/null)"
+  fi
+  printf '%s' "$_ARIZE_API_KEY_CACHE"
+}
+claude()   { ARIZE_API_KEY="$(_arize_key)" command claude "$@"; }
+gemini()   { ARIZE_API_KEY="$(_arize_key)" command gemini "$@"; }
+opencode() { ARIZE_API_KEY="$(_arize_key)" command opencode "$@"; }
+ZWRAP
+    ok "added arize wrappers to zshrc"; fi
+  # NOTE: the per-harness installers are interactive (TTY) — run them yourself once:
+  #   REPO=~/.claude/plugins/marketplaces/coding-harness-tracing
+  #   "$REPO"/install.sh gemini && "$REPO"/install.sh opencode && "$REPO"/install.sh codex
+  #   (codex also needs a one-time `/hooks` approval inside a codex session)
+  say "fleet tracing: run install.sh gemini|opencode|codex|cursor (interactive) — see PLUGINS.md"
 else warn "claude CLI not found — install plugins via /plugin in-app"; fi
 
 # 5. Secrets root: .env.local -> bws -> age key ------------------------------
