@@ -76,6 +76,16 @@ one, manufacturing depth. Just say what it is. (avoid-ai-writing flags the dash 
 - Bad: "It's not just a planner, it's a way to never miss a talk."
 - Fix: "A planner that resolves the time conflicts for you."
 
+**Filler / dead weight** — a sentence that carries no information. Tell: delete it and nothing
+is lost. Cut it, and vary sentence length so the rhythm isn't a flat row of equal lines.
+- Bad: "AI Engineer World's Fair has 300 talks. You can't see them all."
+- Fix: "551 talks at AI Engineer World's Fair. A few I'm not missing:"
+
+**Abstract framing over a concrete number** — leading with a vague observation when a specific
+figure hits harder. Lead with the number or the fact, not the commentary about it.
+- Bad: "30 parallel tracks, and the talk you want is always up against another talk you want."
+- Fix: "551 talks at AI Engineer World's Fair."
+
 ## Process
 
 1. Draft in my own words.
