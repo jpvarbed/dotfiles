@@ -21,3 +21,19 @@ this is the public, skill/agent-construction subset.)
   `linting-and-scoring` + the verification ethos: auto-audit whether a skill/agent
   actually obeys its own instructions.
   https://arxiv.org/html/2512.10172v1
+
+## Harnesses, reliability & evaluation
+- **From Failed Trajectories to Reliable LLM Agents: Diagnosing and Repairing Harness Flaws (HarnessFix)** — Chen et al., Jun 2026.
+  Drives harness repair from trace-grounded failure diagnoses: normalizes execution traces, attributes
+  failures to a **7-layer harness taxonomy (ETCLOVG** — Execution, Tooling, Context, Lifecycle,
+  Observability, Verification, Governance**)**, then applies scoped, regression-validated repairs;
+  **+15–50%** held-out across four benchmarks, beating prompt-only evolution and human-designed harnesses.
+  → A concrete framework for debugging *our* skills/harnesses: classify a failure by layer before
+  patching, and prefer scoped edits over broad prompt rewrites. Pairs with `linting-and-scoring`.
+  https://arxiv.org/html/2606.06324v1
+- **Beyond pass@1: A Reliability Science Framework for Long-Horizon LLM Agents** — Khanal, Tao, Zhou, Mar 2026.
+  pass@1 on short tasks is "structurally blind" to long-horizon reliability; capability and reliability
+  rankings diverge at length, with frontier models showing **meltdown rates up to 19%**. Argues for
+  reliability-specific metrics over single-shot capability scores. → Reinforces our verifiability-first
+  ethos: a skill passing once ≠ reliable; measure consistency across long runs, not one green checkmark.
+  https://arxiv.org/pdf/2603.29231
