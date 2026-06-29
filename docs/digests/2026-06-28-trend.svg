@@ -1,0 +1,29 @@
+<svg width="680" height="260" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica,Arial,sans-serif">
+<rect width="680" height="260" fill="white"/>
+<text x="44" y="18" font-size="13" font-weight="600" fill="#1a1a1a">Digest activity — last 1 run(s)</text>
+<rect x="44" y="27" width="10" height="10" rx="2" fill="#185FA5"/>
+<text x="58" y="36" font-size="11" fill="#555">skills</text>
+<rect x="116" y="27" width="10" height="10" rx="2" fill="#3C3489"/>
+<text x="130" y="36" font-size="11" fill="#555">papers</text>
+<rect x="188" y="27" width="10" height="10" rx="2" fill="#0F6E56"/>
+<text x="202" y="36" font-size="11" fill="#555">releases</text>
+<rect x="274" y="27" width="10" height="10" rx="2" fill="#BA7517"/>
+<text x="288" y="36" font-size="11" fill="#555">candidates</text>
+<line x1="44" y1="208.0" x2="664" y2="208.0" stroke="#eee"/>
+<text x="38" y="211.0" font-size="10" fill="#999" text-anchor="end">0</text>
+<line x1="44" y1="175.6" x2="664" y2="175.6" stroke="#eee"/>
+<text x="38" y="178.6" font-size="10" fill="#999" text-anchor="end">1</text>
+<line x1="44" y1="143.2" x2="664" y2="143.2" stroke="#eee"/>
+<text x="38" y="146.2" font-size="10" fill="#999" text-anchor="end">2</text>
+<line x1="44" y1="110.8" x2="664" y2="110.8" stroke="#eee"/>
+<text x="38" y="113.8" font-size="10" fill="#999" text-anchor="end">3</text>
+<line x1="44" y1="78.4" x2="664" y2="78.4" stroke="#eee"/>
+<text x="38" y="81.4" font-size="10" fill="#999" text-anchor="end">4</text>
+<line x1="44" y1="46.0" x2="664" y2="46.0" stroke="#eee"/>
+<text x="38" y="49.0" font-size="10" fill="#999" text-anchor="end">5</text>
+<rect x="322.0" y="143.2" width="15.0" height="64.8" fill="#185FA5"/>
+<rect x="338.0" y="143.2" width="15.0" height="64.8" fill="#3C3489"/>
+<rect x="354.0" y="46.0" width="15.0" height="162.0" fill="#0F6E56"/>
+<rect x="370.0" y="143.2" width="15.0" height="64.8" fill="#BA7517"/>
+<text x="354.0" y="224" font-size="10" fill="#555" text-anchor="middle">06-28</text>
+</svg>

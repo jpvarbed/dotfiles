@@ -20,3 +20,10 @@ skills/
 ### engineering
 - **adversarial-review** — ruthless independent second-model (Gemini CLI) critique
   of a plan/spec/ADR/diff, then triage + optionally fold findings into specs/issues.
+
+### knowledge
+- **agentic-engineering** — curated KB on building agentic systems (loop/harness
+  design, context engineering, the agentic web).
+- **gap-briefing** — close the cutoff→now delta filtered through your own projects:
+  fan-out search, read primary sources, rank by impact, deliver a visual sourced
+  briefing, persist roadmap-relevant findings. Output to `docs/digests/gap-briefings/`.
