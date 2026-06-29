@@ -24,8 +24,9 @@ command -v node >/dev/null || warn "node not found — some skills need it (brew
 command -v jq   >/dev/null || warn "jq not found — needed to pull secrets from bws (brew install jq)"
 if command -v brew >/dev/null; then
   command -v age >/dev/null && skip "age present" || { say "Installing age"; brew install age && ok "age installed"; }
+  command -v dot >/dev/null && skip "graphviz present" || { say "Installing graphviz"; brew install graphviz && ok "graphviz installed"; }  # digest diagrams (native SVG render, no headless browser)
 else
-  warn "Homebrew not found — install age manually (https://github.com/FiloSottile/age)"
+  warn "Homebrew not found — install age + graphviz manually (age: github.com/FiloSottile/age; graphviz: graphviz.org)"
 fi
 if command -v bws >/dev/null; then skip "bws present ($(bws --version 2>/dev/null))"
 elif command -v cargo >/dev/null; then say "Installing bws via cargo"; cargo install bws && ok "bws installed"
