@@ -19,6 +19,10 @@ tightened. Don't manufacture it. If you have to invent drama, you buried the rea
 
 Read-aloud test: would I say this sentence to another engineer? If it sounds like ad copy, cut it.
 
+Assume the reader is intelligent and patient. Avoid trying to sound insightful. Avoid
+concluding sentences that feel quotable. Every major claim should emerge from reasoning
+rather than assertion.
+
 ## Voice
 
 - Terse, technical, first person. State the finding flat.
@@ -53,6 +57,11 @@ it's a hard rule.
 
 **real / actual as an intensifier** — "the real bottleneck", "actual tests run". Name what
 makes it so, or drop the word.
+
+**Manufactured quotability** — a clever closer built to sound deep, asserting a vibe instead
+of earning it. Tell: it would fit on a poster but doesn't follow from anything you argued.
+Cut it, or replace it with the reasoning that should have led there.
+- Bad: "The fat was always the point. The salad was just keeping it company."
 
 ## Process
 
