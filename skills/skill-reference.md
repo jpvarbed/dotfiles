@@ -49,7 +49,7 @@ marketplace. Re-run it to pull a new machine into sync.
 - **Convex** skills: clone the repo, then point your agent's skills dir at its
   `skills/` (or copy the ones you want). Auth needs `CONVEX_PAT` (in Bitwarden SM
   project `pnw-golf-ai`; backup in `~/dev/.env.local`).
-- **My own skills** (this folder, 17): each is `skills/<category>/<name>/SKILL.md`,
+- **My own skills** (this folder, 18): each is `skills/<category>/<name>/SKILL.md`,
   symlinked into `~/.claude/skills` by setup.sh (the linker globs `**/SKILL.md` and
   names by basename — category folders are for humans, not the linker).
 
@@ -74,6 +74,7 @@ marketplace. Re-run it to pull a new machine into sync.
 
   **knowledge**
   - `knowledge/agentic-engineering` — reading-list KB curator (encrypted; see README).
+  - `knowledge/gap-briefing` — catch up on what changed since the model's cutoff, filtered through Jason's projects → ranked, sourced, visual briefing.
 
   **productivity**
   - `productivity/env-status-board` — "where are we" status board (shipped / open JAS / blocked) via the viz tool; JAS over the Linear GraphQL API.
