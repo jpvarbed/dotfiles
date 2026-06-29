@@ -76,9 +76,9 @@ PROMPT_WITH_IMAGE="$PROMPT
 @$ABS_IMAGE_PATH"
 
 # Run 3 pro queries in parallel
-gemini --yolo --skip-trust -m "$PRO_MODEL" -p "$PROMPT_WITH_IMAGE" > "$TMP1" 2>&1 & PID1=$!
-gemini --yolo --skip-trust -m "$PRO_MODEL" -p "$PROMPT_WITH_IMAGE" > "$TMP2" 2>&1 & PID2=$!
-gemini --yolo --skip-trust -m "$PRO_MODEL" -p "$PROMPT_WITH_IMAGE" > "$TMP3" 2>&1 & PID3=$!
+gemini --skip-trust -m "$PRO_MODEL" -p "$PROMPT_WITH_IMAGE" > "$TMP1" 2>&1 & PID1=$!
+gemini --skip-trust -m "$PRO_MODEL" -p "$PROMPT_WITH_IMAGE" > "$TMP2" 2>&1 & PID2=$!
+gemini --skip-trust -m "$PRO_MODEL" -p "$PROMPT_WITH_IMAGE" > "$TMP3" 2>&1 & PID3=$!
 
 # Wait for all runs to finish
 wait "$PID1" "$PID2" "$PID3"
@@ -109,5 +109,5 @@ Your task is to:
 4. Present a single, authoritative, high-signal report containing only the verified consensus findings, ranked by severity (Critical / High / Medium).
 5. Add a 'Consensus Summary' at the top explaining the state of the render (e.g., '3/3 runs agree that X is broken, while 2/3 agree Y needs adjustment')."
 
-gemini --yolo --skip-trust -m "$FLASH_MODEL" -p "$SYNTH_PROMPT" 2>&1 \
+gemini --skip-trust -m "$FLASH_MODEL" -p "$SYNTH_PROMPT" 2>&1 \
   | grep -viE 'token file corrupted|Loaded cached credentials|Failed to load API key|Both GOOGLE_API_KEY|not running in a trusted|256-color|Ripgrep is not available|^[[:space:]]+at (async|File)'

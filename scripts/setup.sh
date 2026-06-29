@@ -329,7 +329,7 @@ else warn "can't fetch GEMINI_API_KEY (need bws token + jq)"; fi
 
 # gy alias: gemini YOLO (auto-approve + skip trust) for adversarial-review etc
 if [ -f "$HOME/.zshrc" ] && grep -qF 'alias gy=' "$HOME/.zshrc"; then skip "gy alias present"
-else printf "\n# gemini YOLO (auto-approve + skip trust) — adversarial-review etc\nalias gy='gemini --yolo --skip-trust'\n" >> "$HOME/.zshrc"; ok "added gy alias"; fi
+else printf "\n# gy = gemini YOLO (auto-approves tool calls) — interactive/trusted use only.\n# The review SCRIPTS (gemini-review.sh, visual-critique) deliberately DON'T yolo: they\n# review untrusted input, so they pass --skip-trust without --yolo. Don't gy untrusted text.\nalias gy='gemini --yolo --skip-trust'\n" >> "$HOME/.zshrc"; ok "added gy alias"; fi
 
 # 8. Scheduled-task bodies ---------------------------------------------------
 # Track task SKILL.md bodies in the repo; symlink them into ~/.claude. NOTE: this

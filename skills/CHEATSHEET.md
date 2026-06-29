@@ -1,7 +1,8 @@
 # Skills cheat sheet — when to use what
 
-The curated set after the skill-audit (72 → ~48). Plugins (superpowers, ponytail)
-add the always-on process skills on top; this lists the on-demand ones.
+The on-demand skills: 19 of my own (full inventory + sources in [`skill-reference.md`](./skill-reference.md))
+plus the curated external sets. Plugins (superpowers, ponytail) add the always-on process skills on
+top; this is the *when-to-use-what* index.
 
 ## Design & plan
 - **grill-me** — stress-test a plan/design by relentless interview (decision tree).
@@ -24,10 +25,12 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **make-interfaces-feel-better** — UI polish, micro-interactions, visual detail.
 - **r3f-best-practices** — React Three Fiber / Three.js work.
 - **openrouter** — call any LLM (gpt/gemini/llama/deepseek…) via OpenRouter's one-key OpenAI-compatible gateway; cheap/free model routing + non-Claude second opinions. Key from bws. (gemini-CLI *critiques* → `adversarial-review` instead.)
+- **mcp-dev** — build/extend an agent product across one backend → CLI + MCP + skill (the private-service + public-tooling split); keep the surfaces in sync.
 
 ## Review & verify
 - **adversarial-review** — outside model (Gemini) red-teams a plan/spec/diff. Quick single-model check.
-- **review-council** — multi-model (Codex `exec` + Gemini) × ≥3 personas (Architect/Pragmatist/Verifier) grade a plan/spec/tasks → consensus PASS/CONCERNS/FAIL + deduped must-fix. The heavy upgrade of adversarial-review; use before `/goal` dispatch or implementing a `/spec`.
+- **review-council** — harness-as-judge (deterministic checks + repo gates) + multi-model (Codex `exec` + Gemini) × ≥3 personas grade a plan/spec/tasks → consensus PASS/CONCERNS/FAIL + deduped must-fix. The heavy upgrade of adversarial-review; use before `/goal` dispatch or implementing a `/spec`.
+- **visual-critique** — 3-run majority-vote Gemini critique of a rendered image / 3D pose / UI (kills single-run hallucination). Use to verify a render/figure/screenshot looks right.
 - **review** — review changes since a point (standards + correctness).
 - **thermos** — run both thermo-nuclear reviews in parallel, then synthesize.
 - **thermo-nuclear-code-quality-review** — extremely strict maintainability/abstraction review.
@@ -63,6 +66,7 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **writing-beats** — assemble an article as a journey of beats.
 - **edit-article** — revise/tighten an existing draft.
 - **avoid-ai-writing** — the de-AI editor: deterministic detector (0–100 score + flags), rewrite/detect/edit modes, voice profiles. Won the bake-off vs `unslop` (culled).
+- **writing-hooks** — Jason's voice for tweets/threads/hooks (plain, finding-first); catches the tells avoid-ai-writing + the motion hook skills miss. Pair when drafting/cleaning a tweet or hook.
 
 ## Marketing / copy  (motion-creative)
 - **hook-writing** — high-converting hooks for ads / TikTok / Reels / organic.
@@ -94,5 +98,7 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **domain-name-brainstormer** — name ideas + TLD availability.
 - **env-status-board** — "where are we": 3-column status board (shipped / open Linear JAS / blocked-on-you) of the dotfiles+skills+env work, rendered with the viz tool.
 - **caveman** — ultra-terse output mode (own skill; upstream dropped it).
+- **gap-briefing** — catch up on what changed since the model's cutoff, filtered through Jason's projects → ranked, sourced, visual intel briefing ("what did I miss").
+- **focus-timer** — report into the cross-project agent fleet / drive the focus.jasonv.dev Pomodoro timer (works from any project; CLI + MCP).
 - **resolving-merge-conflicts** — resolve an in-progress git merge/rebase conflict.
 - **obsidian-vault** — Obsidian notes. **git-guardrails-claude-code** / **setup-pre-commit** — repo setup.
