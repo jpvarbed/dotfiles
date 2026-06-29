@@ -14,6 +14,8 @@ this is the public, skill/agent-construction subset.)
   Proposes dynamically-instantiated privilege levels. → Directly maps to our layered
   instructions (soul.md global → project guide → skill → user → tool); conflict
   resolution across layers is an unsolved, real failure mode.
+  → **applied:** `meta/instruction-conflicts` skill (maps the layer stack, flags contradictions,
+  makes precedence explicit) via `meta/apply-paper`; JAS-22.
   https://arxiv.org/html/2604.09443v3
 - **Offscript: Automated Auditing of Instruction Adherence in LLMs** — Clark et al., UW, Dec 2025.
   An **agentic auditor** LLM generates test queries to detect instruction-following

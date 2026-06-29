@@ -91,3 +91,6 @@ evaluating / watching), cross-referenced to Linear JAS issues.
 
 [`docs/papers.md`](./docs/papers.md) — research for skill / agent construction
 (harnesses, reliability, eval, instruction-following).
+
+[`docs/harnesses.md`](./docs/harnesses.md) — survey of coding-agent harnesses
+(superpowers, Taskmaster, spec-kit, BMAD, …) focused on state machines + gates.
