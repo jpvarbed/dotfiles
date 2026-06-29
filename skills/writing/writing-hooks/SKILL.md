@@ -63,6 +63,13 @@ of earning it. Tell: it would fit on a poster but doesn't follow from anything y
 Cut it, or replace it with the reasoning that should have led there.
 - Bad: "The fat was always the point. The salad was just keeping it company."
 
+**Parataxis** — short clauses stacked with no conjunction, so the juxtaposition implies a
+connection you never made. The rhythm fakes weight (and it's what powers most quotable
+closers). Fix: state the actual relationship between the ideas (because / so / but), or merge
+them into one sentence that earns the point. https://en.wikipedia.org/wiki/Parataxis
+- Bad: "The fat was always the point. The salad was just keeping it company."
+- Better: "The salad was there to make the fat feel acceptable."
+
 ## Process
 
 1. Draft in my own words.
