@@ -87,6 +87,7 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **linting-and-scoring** — score a skill against a binary pass/fail rubric → tier + top fixes.
 - **determinize-refactor** — plan to move a skill's prose into scripts/contracts (script-mode; cut tokens + variance).
 - **goal-spec** — compile a rough task into a launch-ready `/goal` brief: verifiability gate → context-access + verification-plan + binary rubric → adversarial pass. Use before dispatching agents.
+- **apply-paper** — turn a research finding (docs/papers.md) into a concrete skill/agent change: claim → where-it-applies → change → before/after proof. Closes capture→shipped.
 - **cli-for-agents** — design CLIs that agents can drive reliably.
 - **domain-name-brainstormer** — name ideas + TLD availability.
 - **env-status-board** — "where are we": 3-column status board (shipped / open Linear JAS / blocked-on-you) of the dotfiles+skills+env work, rendered with the viz tool.

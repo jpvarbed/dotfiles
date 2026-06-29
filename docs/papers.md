@@ -20,6 +20,8 @@ this is the public, skill/agent-construction subset.)
   violations (flagged 84.6%, 22.2% material on 65 custom instructions). → Pairs with
   `linting-and-scoring` + the verification ethos: auto-audit whether a skill/agent
   actually obeys its own instructions.
+  → **applied:** Adherence-audit pass added to `meta/linting-and-scoring` (behavioral, generates
+  adversarial test queries per instruction) via `meta/apply-paper`; JAS-22.
   https://arxiv.org/html/2512.10172v1
 
 ## Harnesses, reliability & evaluation

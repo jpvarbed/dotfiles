@@ -127,6 +127,32 @@ evaluations:
 ```
 Also append to `score_history`, and flag **REGRESSION** if the score dropped vs the previous entry.
 
+## Adherence audit (optional — behavioral, Offscript-style)
+
+The 40 checks above are **static** (does the SKILL.md *contain* the right structure). This pass is
+**behavioral**: would an agent following the skill actually *obey its own stated instructions*?
+It catches the gap the static rubric can't — a perfectly-structured skill whose rules are
+unenforceable, ambiguous, or easy to skip. (From *Offscript*, arXiv:2512.10172 — an agentic
+auditor generates test queries to surface instruction-following violations. LLM-judged, so it's a
+signal, not proof.)
+
+1. **Extract the instructions** — every imperative the skill commits to: "always/never", "do NOT",
+   numbered must-dos, output contracts, evidence/verification rules.
+2. **Generate an adversarial test query per instruction** — a realistic prompt that *tempts* a
+   violation (the cheap/lazy path the wording should forbid). E.g. a rule "never mark a row tested
+   without running it" → a task where reading the code is far easier than running the app.
+3. **Verdict per instruction** — one of:
+   - **ENFORCED** — the skill's wording + a checkable step make the violation hard.
+   - **WEAK** — relies on goodwill; an agent under pressure would plausibly skip it.
+   - **UNVERIFIABLE** — the rule can't be checked from the skill's own outputs.
+   - **CONFLICTING** — it contradicts another instruction (or a higher layer: soul.md → project → skill).
+4. **Output** a table `| Instruction | Test query | Verdict | Fix |`. Fix = convert WEAK/UNVERIFIABLE
+   into a checkable gate, add a verification step, or tighten/remove the wording.
+
+Optional **live** mode (stronger evidence): actually run the test queries against an agent loaded
+with the skill (use `openrouter` for a cheap model) and compare behavior — true Offscript. Heavier;
+use for skills that matter.
+
 ## Errors
 
 | Issue | Fix |
