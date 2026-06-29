@@ -49,7 +49,7 @@ marketplace. Re-run it to pull a new machine into sync.
 - **Convex** skills: clone the repo, then point your agent's skills dir at its
   `skills/` (or copy the ones you want). Auth needs `CONVEX_PAT` (in Bitwarden SM
   project `pnw-golf-ai`; backup in `~/dev/.env.local`).
-- **My own skills** (this folder, 13): each is `skills/<category>/<name>/SKILL.md`,
+- **My own skills** (this folder, 14): each is `skills/<category>/<name>/SKILL.md`,
   symlinked into `~/.claude/skills` by setup.sh (the linker globs `**/SKILL.md` and
   names by basename — category folders are for humans, not the linker).
 
@@ -59,6 +59,7 @@ marketplace. Re-run it to pull a new machine into sync.
   - `engineering/total-tdd` — whole-app audit→test→fix loop; one canonical feature-audit CSV.
   - `engineering/share-artifact` — publish apps/artifacts → `<slug>.jasonv.app` (drives `~/dev/artifact-studio-tools`; key from bws).
   - `engineering/focus-timer` — drive the focus-timer Pomodoro CLI/app.
+  - `engineering/openrouter` — call any LLM via OpenRouter's one-key OpenAI-compatible gateway (cheap/free routing + non-Claude second opinions); key from bws (JAS-2 llm_bridge runtime).
 
   **meta** (skill / agent tooling)
   - `meta/linting-and-scoring` — score a skill against the 40-check binary rubric → tier.

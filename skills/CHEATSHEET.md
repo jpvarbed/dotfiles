@@ -23,6 +23,7 @@ add the always-on process skills on top; this lists the on-demand ones.
 - **typescript-best-practices** — when reading/editing `.ts`/`.tsx`.
 - **make-interfaces-feel-better** — UI polish, micro-interactions, visual detail.
 - **r3f-best-practices** — React Three Fiber / Three.js work.
+- **openrouter** — call any LLM (gpt/gemini/llama/deepseek…) via OpenRouter's one-key OpenAI-compatible gateway; cheap/free model routing + non-Claude second opinions. Key from bws. (gemini-CLI *critiques* → `adversarial-review` instead.)
 
 ## Review & verify
 - **adversarial-review** — outside model (Gemini) red-teams a plan/spec/diff. Default for anything that matters.

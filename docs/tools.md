@@ -20,6 +20,7 @@ Status: **✅ using** · **🔬 evaluating** (JAS#) · **👀 watching**. Add a 
 | Tool | What | Status |
 |---|---|---|
 | [gemini CLI](https://github.com/google-gemini/gemini-cli) | Independent second model for `adversarial-review` / `visual-critique` (`gy` alias = `--yolo --skip-trust`) | ✅ using |
+| [OpenRouter](https://openrouter.ai) | One key → 300+ LLMs over an OpenAI-compatible gateway; cheap/free routing + non-Claude second-opinion models (skill: `openrouter`). The runtime for the vendor-neutral `llm_bridge` idea | 🔬 (JAS-29; ties JAS-2, key pending) |
 | [ast-grep](https://github.com/ast-grep/ast-grep) | Structural (AST) code search & rewrite — multi-language | 🔬 (JAS-1) |
 | [apple/container](https://github.com/apple/container) | Local Linux containers as lightweight VMs on Apple Silicon (Docker Desktop alt; local counterpart to CF Sandbox) | 🔬 (JAS-16) |
 
