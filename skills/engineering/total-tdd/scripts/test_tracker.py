@@ -44,18 +44,38 @@ class TestPhaseInference(unittest.TestCase):
         self.assertEqual(tracker.infer_phase([("F1", "fail"), ("F2", "pass")])[0], 3)
 
 
+def _row(status="", verified="", issues="", fix="", id="F1"):
+    return {"id": id, "status": status, "verified": verified, "issues": issues, "fix": fix}
+
+
 class TestGate(unittest.TestCase):
     def test_phase3_blocked_by_fail(self):
-        self.assertTrue(tracker.gate_blockers([("F1", "fail"), ("F2", "fixed")], 3))
+        self.assertTrue(tracker.gate_blockers([_row(status="fail", issues="x"), _row(status="fixed", fix="y", id="F2")], 3))
 
     def test_phase3_complete(self):
-        self.assertEqual(tracker.gate_blockers([("F1", "fixed"), ("F2", "verified")], 3), [])
+        self.assertEqual(tracker.gate_blockers([_row(status="fixed", fix="y"), _row(status="verified", verified="ok", id="F2")], 3), [])
 
     def test_phase4_blocked_until_all_verified(self):
-        self.assertTrue(tracker.gate_blockers([("F1", "verified"), ("F2", "fixed")], 4))
+        self.assertTrue(tracker.gate_blockers([_row(status="verified", verified="ok"), _row(status="fixed", fix="y", id="F2")], 4))
 
     def test_phase2_blocked_by_spec(self):
-        self.assertTrue(tracker.gate_blockers([("F1", "spec")], 2))
+        self.assertTrue(tracker.gate_blockers([_row(status="spec")], 2))
+
+    # evidence-before-status enforcement (Offscript adherence-audit finding)
+    def test_pass_without_evidence_blocks_phase2(self):
+        b = tracker.gate_blockers([_row(status="pass", verified="")], 2)
+        self.assertTrue(any("evidence" in r for _, r in b))
+
+    def test_pass_with_evidence_clears_phase2(self):
+        self.assertEqual(tracker.gate_blockers([_row(status="pass", verified="logged in; dashboard ok")], 2), [])
+
+    def test_verified_without_evidence_blocks_phase4(self):
+        b = tracker.gate_blockers([_row(status="verified", verified="")], 4)
+        self.assertTrue(any("evidence" in r for _, r in b))
+
+    def test_fail_without_repro_blocks_phase2(self):
+        b = tracker.gate_blockers([_row(status="fail", issues="")], 2)
+        self.assertTrue(any("repro" in r for _, r in b))
 
 
 class TestFileOps(unittest.TestCase):

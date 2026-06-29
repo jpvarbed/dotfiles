@@ -63,18 +63,48 @@ def infer_phase(sts):
     return None, "all rows verified"
 
 
-def gate_blockers(sts, phase):
-    """Rows blocking completion of `phase`. Empty list == phase complete."""
+def _f(d, col):
+    return (d.get(col) or "").strip()
+
+
+def gate_blockers(rows, phase):
+    """Rows blocking completion of `phase`, as (id, reason). Empty == phase complete.
+
+    Enforces evidence-before-status (the Offscript adherence-audit finding): a terminal
+    status with no recorded evidence is a blocker, not a pass — `pass`/`verified` need the
+    Evidence (`verified`) cell, `fail` needs a repro in `issues`, `fixed` needs a `fix` note.
+    """
+    if phase not in (1, 2, 3, 4):
+        raise SystemExit(f"bad phase {phase} (1-4)")
+
+    def rid(d, i):
+        return d.get("id") or f"row{i + 1}"
+
     if phase == 1:
-        return [(i, s or "<empty>") for i, s in sts if s not in STATUSES] or \
-               ([("(none)", "no rows")] if not sts else [])
-    if phase == 2:
-        return [(i, s) for i, s in sts if s == "spec" or s not in STATUSES]
-    if phase == 3:
-        return [(i, s) for i, s in sts if s == "fail"]
-    if phase == 4:
-        return [(i, s) for i, s in sts if s != "verified"]
-    raise SystemExit(f"bad phase {phase} (1-4)")
+        b = [(rid(d, i), "no valid status") for i, d in enumerate(rows) if _f(d, "status") not in STATUSES]
+        return b or ([("(none)", "no rows")] if not rows else [])
+
+    b = []
+    for i, d in enumerate(rows):
+        s = _f(d, "status")
+        if phase == 2:
+            if s in ("", "spec") or s not in STATUSES:
+                b.append((rid(d, i), "untested"))
+            elif s == "pass" and not _f(d, "verified"):
+                b.append((rid(d, i), "pass without evidence"))
+            elif s == "fail" and not _f(d, "issues"):
+                b.append((rid(d, i), "fail without repro"))
+        elif phase == 3:
+            if s == "fail":
+                b.append((rid(d, i), "fail not fixed"))
+            elif s == "fixed" and not _f(d, "fix"):
+                b.append((rid(d, i), "fixed without a fix note"))
+        elif phase == 4:
+            if s != "verified":
+                b.append((rid(d, i), "not verified"))
+            elif not _f(d, "verified"):
+                b.append((rid(d, i), "verified without evidence"))
+    return b
 
 
 def cmd_init(a):
@@ -130,7 +160,7 @@ def cmd_phase(a):
 
 
 def cmd_gate(a):
-    blockers = gate_blockers(statuses(a.csv), a.phase)
+    blockers = gate_blockers(as_dicts(a.csv), a.phase)
     if not blockers:
         print(f"phase {a.phase}: COMPLETE")
         return 0

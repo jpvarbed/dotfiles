@@ -67,6 +67,8 @@ The report is the forcing function: an empty cell is a visible gap, so every sto
 
 - **Evidence before status.** A row is `pass`/`verified` only after the behavior was observed
   running — never from reading code (see `verify-this`, `verification-before-completion`).
+  **Enforced:** `tracker.py gate` blocks a `pass`/`verified` row with an empty Evidence cell
+  (and a `fail` with no repro in `issues`) — a status without evidence is a blocker, not done.
 - The CSV is canonical and updated in place — never fork copies. It survives sessions; that's
   how the loop resumes.
 - After each phase: `render.py` to refresh `docs/feature-audit.html`; never let it drift.
