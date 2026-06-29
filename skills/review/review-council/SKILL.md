@@ -31,25 +31,39 @@ Both engines are used so a finding's strength reflects model diversity, not just
 Edit the `PERSONAS` array in `council.sh` to rebalance or add a 4th (e.g. a **Risk/Security** persona on Gemini). Each persona returns the same fixed shape: `VERDICT` + ≤3 ranked findings (`[H|M|L] claim — why — fix`) + biggest risk.
 
 ## Step 1 — Run the council
-Invoke `council.sh` on the artifact. It runs each persona on its engine (`codex exec --dangerously-bypass-approvals-and-sandbox` = yolo; Gemini via the sibling `gemini-review.sh`) and prints each persona's block. Engines run independently — if one fails (auth/CLI), the others still produce a partial council; note the gap, don't silently drop it.
+Invoke `council.sh` on the artifact. Each persona runs on its engine **read-only** — Codex in
+`--sandbox read-only` (no writes/exec, no approvals), Gemini via `gemini-review.sh` **without
+`--yolo`** — because the artifact is untrusted text and must not be able to auto-execute an
+injected command. The script probes each engine first (`command -v`), tags any engine that exits
+nonzero as `(!! … NO verdict)`, and counts how many personas produced a real block. If a persona
+is skipped/failed, **say so in the synthesis** — never treat a `command not found` or error blob
+as a verdict.
 
 ## Step 2 — Synthesize (Claude) → the output contract
 Read all persona blocks and produce ONE report:
 
+Every field below is **mandatory** — they're what make the rules checkable instead of skippable:
+
 ```
 COUNCIL VERDICT: PASS | CONCERNS | FAIL
+VERDICT DERIVED FROM: Architect=<v> · Pragmatist=<v> · Verifier=<v> ; highest severity = <H|M|L> → <rule applied>
 GATE: proceed | revise-then-proceed | stop
-MUST-FIX (deduped, ranked):
-  - [H|M|L] <finding>  (raised by: Architect, Verifier)   ← agreement = higher confidence
-PER-PERSONA: Architect <verdict> · Pragmatist <verdict> · Verifier <verdict>
+MUST-FIX (deduped, ranked; every line tags who raised it):
+  - [H|M|L] <finding>  (raised by: Architect, Verifier)   ← 2+ personas = higher confidence, list first
+DROPPED (re-litigation / out-of-scope / invented gap — empty is fine):
+  - <finding> — why dropped
+PER-PERSONA: Architect <verdict> · Pragmatist <verdict> · Verifier <verdict>  (+ any skipped/failed engine)
 ```
 
-**Verdict rule (deterministic):**
+**Verdict rule (deterministic — show it on the DERIVED FROM line):**
 - **FAIL** if any persona returns FAIL on a High-severity issue → GATE: stop.
 - **CONCERNS** if any High/Medium findings remain (no blocking FAIL) → GATE: revise-then-proceed.
 - **PASS** if all personas PASS or only Low findings remain → GATE: proceed.
 
-Dedupe findings across personas (the same issue from two personas is higher-confidence, list it first). Triage like `adversarial-review`: drop findings that re-litigate a settled decision or invent gaps not in the artifact — say why you dropped them. LLM-judged, so it's a strong signal, not a certificate.
+**Dedupe** across personas (same issue from two = higher confidence, list first with `raised by:`).
+**Triage** like `adversarial-review`: a finding that re-litigates a settled decision or invents a
+gap not in the artifact goes in the **DROPPED** block with the reason — don't silently keep or
+silently discard it. LLM-judged: a strong signal, not a certificate.
 
 ## Use it with plans & other skills
 - After `writing-plans` / `to-prd` / `to-issues` / a `goal-spec` brief / a `/spec` `tasks.md` — council it before acting.
@@ -60,8 +74,9 @@ Dedupe findings across personas (the same issue from two personas is higher-conf
 
 | Issue | Fix |
 |---|---|
-| `codex` not on PATH | Install the Codex CLI (`codex --version` to confirm); without it the Codex personas are skipped — run gemini-only and note the reduced council. |
-| Codex hangs or asks to act on the repo | The prompt says review-only; it runs with `--dangerously-bypass-approvals-and-sandbox` so there are no prompts. If it tries repo work, tighten the persona prompt or use `--sandbox read-only`. |
-| Gemini persona errors (auth/trust/model 404) | See `adversarial-review`'s error table — `gemini-review.sh` carries the fixes (API-key auth in `~/.gemini/.env`, `--yolo --skip-trust`, a live `--model`). |
+| `codex` not on PATH | The script guards with `command -v codex` and skips those personas with a printed note — the council runs partial. Install the Codex CLI (`codex --version`) to restore them. |
+| Codex hangs | Each engine call is wrapped in `timeout`/`gtimeout` (300s) when available — install coreutils (`brew install coreutils`) on macOS so the wrapper exists; otherwise a hung engine has no upper bound. |
+| Why read-only / no `--yolo`? | **Security, not optional.** The artifact is untrusted; Codex runs `--sandbox read-only -c approval_policy=never` and Gemini drops `--yolo`, so an injected "run this" can't auto-execute. Do not "fix" a stuck run by re-adding full bypass. |
+| Gemini persona errors (auth/trust/model 404) | See `adversarial-review`'s error table — `gemini-review.sh` carries the fixes (API-key auth in `~/.gemini/.env`, `--skip-trust`, a live `--model`). |
 | Personas all agree too easily | They share an artifact; vary the engines/lenses (edit `PERSONAS`) or add `--focus` on the riskiest area. Agreement on a real flaw is fine; agreement on "looks good" deserves a skeptical re-read. |
 | Reviewing a huge diff/spec | Council the highest-risk slice (name what you scoped out), or split — don't feed 10k lines and trust a one-shot verdict. |

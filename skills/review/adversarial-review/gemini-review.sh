@@ -47,5 +47,8 @@ Pay special attention to: $FOCUS"
     cat "$f"
     printf '\n'
   done
-} | gemini --yolo --skip-trust -m "$MODEL" -p "$PROMPT" 2>&1 \
+# SECURITY: no --yolo. The reviewed files are untrusted text; --yolo auto-approves
+# tool calls, so an injected "run this command" in a file could auto-execute. Without
+# it, a pure-text review still works and an injected tool call can't run unattended.
+} | gemini --skip-trust -m "$MODEL" -p "$PROMPT" 2>&1 \
   | grep -viE 'token file corrupted|Loaded cached credentials|Failed to load API key|Both GOOGLE_API_KEY|not running in a trusted|256-color|Ripgrep is not available|^[[:space:]]+at (async|File)'
