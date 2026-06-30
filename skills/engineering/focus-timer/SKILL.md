@@ -61,12 +61,19 @@ Guidance for agents:
 
 ## 3. Auto-report (no manual calls) — CC hook, FOC-12/25
 
-Already wired on Jason's machine: `~/dev/focus-timer-tools/scripts/cc-fleet-hook.py` runs from
-`~/.claude/settings.json` on SessionStart/UserPromptSubmit→working, Notification→needs_you,
-Stop/SubagentStop→done. It POSTs to `FOCUS_CONVEX_SITE/agent/report` with the `FOCUS_API_KEY`
-exported by `~/.zshrc` — so every CC session in every project auto-reports under his account, with
-no cleartext id. It never blocks CC (no key → no-op, errors swallowed, 3s timeout). Semantic
-asks/decisions still use the MCP/CLI explicitly.
+Already wired on Jason's machine, two hooks in `~/.claude/settings.json`:
+- **Presence** — `cc-fleet-hook.py` on SessionStart/UserPromptSubmit→working, Notification→needs_you,
+  Stop/SubagentStop→done (+ the latest prompt as the agent's `activity`).
+- **Commits** — `cc-commit-hook.py` on **PostToolUse(Bash)**: when a command made a git commit, it
+  posts an `output` event with the commit + its files (`commit:`/`file:` refs), resolving the repo
+  from `-C`/`cd` in the command else cwd. **cwd-independent** — captures commits in *any* repo, which
+  the old Stop-based capture (cwd's repo only) missed for `~/dev`-rooted or cross-repo sessions.
+
+Both POST to `FOCUS_CONVEX_SITE/agent/*` with `FOCUS_API_KEY` (from the launchd env on the desktop
+app — see dotfiles README "Gotchas"; the desktop app doesn't see `~/.zshrc`). Never block CC (no key
+→ no-op, errors swallowed, 3s timeout). **Decisions/knowledge are NOT auto-captured** — reasoning
+can't be inferred; record them explicitly at real forks: `focus decide "…" cites=knowledge:<slug>`
+(and `focus learn`/`focus recall` for the concepts). That cite is the graph's whole point.
 
 ## 4. Drive the timer (human-facing)
 
