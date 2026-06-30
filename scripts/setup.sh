@@ -236,6 +236,25 @@ ZWRAP
   say "fleet tracing: run install.sh gemini|opencode|codex|cursor (interactive) — see PLUGINS.md"
 else warn "claude CLI not found — install plugins via /plugin in-app"; fi
 
+# 4b. GUI-session keys + local services (macOS LaunchAgents) -----------------
+# ANTI-PATTERN this fixes: GUI/app-launched agents (Claude DESKTOP, IDEs) and cron do NOT run the
+# shell wrappers above, so a per-shell ARIZE_API_KEY / FOCUS_API_KEY is invisible to them — Arize
+# spans + fleet reports silently drop (bit us on BOTH keys; the config.yaml claude-code entry didn't
+# reach the desktop plugin either — it reads the env var). Fix: dev.jasonv.focus-key fetches both
+# keys from bws at login and `launchctl setenv`s them into the GUI session, so the desktop app
+# inherits them at launch (RESTART the app after any change). focus-web + graph-sync keep
+# focus.localhost + the Neo4j sync alive. Idempotent: bootout then bootstrap.
+if [ "$(uname)" = "Darwin" ] && [ -d "$DOTFILES/macos/LaunchAgents" ]; then
+  for plist in "$DOTFILES"/macos/LaunchAgents/dev.jasonv.*.plist; do
+    [ -f "$plist" ] || continue
+    name="$(basename "$plist")"; label="${name%.plist}"
+    cp "$plist" "$HOME/Library/LaunchAgents/$name"
+    launchctl bootout "gui/$(id -u)/$label" 2>/dev/null
+    launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/$name" 2>/dev/null \
+      && ok "launchagent $label" || warn "launchagent $label: load manually"
+  done
+else skip "LaunchAgents (not macOS / no macos dir)"; fi
+
 # 5. Secrets root: .env.local -> bws -> age key ------------------------------
 say "Loading secrets root (~/dev/.env.local)"
 ENVLOCAL="$DEV/.env.local"

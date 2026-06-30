@@ -87,36 +87,6 @@ collections I pull from and their sources. My own skills live in `skills/`.
 [`docs/tools.md`](./docs/tools.md) — running log of interesting dev tools (using /
 evaluating / watching), cross-referenced to Linear JAS issues.
 
-## Gotchas — desktop app env, hooks, tracing
-
-Hard-won, cross-cutting. Most of these trace back to **one root cause: GUI-launched apps
-(Claude desktop, IDEs) do NOT source `~/.zshrc`**, so anything a shell export provides is invisible
-to them.
-
-- **Keys for the desktop app come from launchd, not the shell.** Terminal `claude` gets keys via the
-  `claude() { ARIZE_API_KEY=… }` wrapper in `~/.zshrc`; the desktop app gets nothing from that. Fix:
-  `scripts/focus-key-load.sh` (run by the `dev.jasonv.focus-key` LaunchAgent at login) fetches keys
-  from bws and `launchctl setenv`s them into the GUI session — currently `FOCUS_API_KEY` (fleet hook)
-  and `ARIZE_API_KEY` (cc-tracing). The bws token is read transiently; only the named keys enter the
-  session env. **Any new key the desktop app needs → add it there.** After changing the launchd env,
-  **fully quit + reopen the app** (it inherits env only at launch).
-- **`~/.claude/settings.json` (env block + hooks) is read at session START.** Editing it — or the
-  launchd env, or a hook script's effect on env — only applies to **new** sessions. Restart to test.
-- **Arize tracing of Claude Code:** the `claude-code-tracing` plugin streams OpenInference spans
-  (full prompts + tool details + content, since `ARIZE_LOG_*=true`) to the Arize **`claude-code`**
-  project — but only where `ARIZE_API_KEY` is present (so: terminal always, desktop only after the
-  launchd fix above). Query traces with `ax traces list <project-id> --start-time <ISO>` (the Arize
-  **ingest** key 401s on the GraphQL API — use the `ax` CLI). Get project ids via `ax projects list`.
-- **Fleet hooks:** presence/activity = `cc-fleet-hook.py` (SessionStart/UserPromptSubmit/Stop);
-  **commits = `cc-commit-hook.py` (PostToolUse on Bash)**, which is cwd-independent. The earlier
-  Stop-based capture only scanned the session's *own cwd* repo, so it silently missed commits when
-  the session was rooted outside a repo (`~/dev`) or committed to a *different* repo — the common
-  orchestration case. Decisions/knowledge are never auto-captured (reasoning can't be inferred); they
-  need explicit `focus decide` / `focus learn`.
-- **Hosting a key-gated artifact → use `public`, not `unlisted`.** Unlisted apps token-gate *every*
-  request, but a browser fetches relative sub-resources (`./app.js`, `./styles.css`) without the
-  token → 404 → blank page. Privacy comes from the in-app key gate, not the URL.
-
 ## Papers
 
 [`docs/papers.md`](./docs/papers.md) — research for skill / agent construction
