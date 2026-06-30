@@ -29,4 +29,7 @@ details (those live in README.md / scripts).
 
 - **secrets root** — `~/dev/.env.local` holds only `BWS_ACCESS_TOKEN`; **bws** is
   the source of truth for all other secrets and the **age** key that decrypts the
-  committed `*.age` docs. See README.md.
+  committed `*.age` docs. See README.md. **Gotcha:** bws/`bws-get` silently return
+  **empty** (not an error) when the token isn't in the shell — interactive: `bws-load`;
+  scripts/non-interactive: `source ~/dev/.env.local` in the same command. (Helper defs +
+  full note in `scripts/setup.sh`.)

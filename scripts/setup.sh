@@ -276,6 +276,11 @@ if [ -n "${BWS_ACCESS_TOKEN:-}" ]; then
 
 # dotfiles: load BWS token on demand — run `bws-load` when you need bws
 bws-load() { export BWS_ACCESS_TOKEN="$(sed -nE 's/^(export )?(BWS_ACCESS_TOKEN|BITWARDEN_ACCESS_TOKEN)="?([^"]*)"?$/\3/p' "$HOME/dev/.env.local" 2>/dev/null | head -1)"; echo "BWS token loaded into this shell."; }
+# GOTCHA: bws (and bws-get) return EMPTY, not an error, when BWS_ACCESS_TOKEN is unset — so a
+# missing token looks like "the secret doesn't exist" and surfaces downstream as a 401 / "credit
+# balance" error. Interactive shell: run `bws-load` first. Scripts / non-interactive shells (no
+# ~/.zshrc loaded, env doesn't persist between them): `set -a; source ~/dev/.env.local; set +a`
+# in the SAME command as the bws call, every time.
 # bws-get KEY — robust single-secret fetch. Uses python (not jq) because bws -o json
 # emits multiline values (e.g. age keys) with raw newlines that break jq for any key after them.
 bws-get() { bws secret list -o json 2>/dev/null | python3 -c "import sys,json;print(next((s['value'] for s in json.loads(sys.stdin.read() or '[]',strict=False) if s['key']==sys.argv[1]),''),end='')" "$1"; }
